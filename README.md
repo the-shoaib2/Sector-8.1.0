@@ -18,8 +18,8 @@ A deep learning model for handwritten digit recognition using PyTorch, with a Fl
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/mnist-classifier.git
-   cd mnist-classifier
+   git clone https://github.com/the-shoaib2/Sector-8.1.0.git
+   cd Sector-8.1.0
    ```
 
 2. **Create and activate virtual environment**
