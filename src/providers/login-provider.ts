@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { SectorClient } from '../clients/synapse-client';
+import { SynapseClient } from '../clients/synapse-client';
 
 export class LoginProvider {
   private readonly _viewType = 'synapse.login';
@@ -7,7 +7,7 @@ export class LoginProvider {
 
   constructor(
     private readonly _extensionUri: vscode.Uri,
-    private readonly _synapseClient: SectorClient
+    private readonly _synapseClient: SynapseClient
   ) {}
 
   showLogin(): void {

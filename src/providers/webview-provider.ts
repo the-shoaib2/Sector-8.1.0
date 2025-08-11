@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { SectorClient } from '../clients/synapse-client';
+import { SynapseClient } from '../clients/synapse-client';
 
 export class WebviewProvider {
   private readonly _viewType = 'synapse.webview';
@@ -7,7 +7,7 @@ export class WebviewProvider {
 
   constructor(
     private readonly _extensionUri: vscode.Uri,
-    private readonly _synapseClient: SectorClient
+    private readonly _synapseClient: SynapseClient
   ) {}
 
   showAssistant(): void {
@@ -312,8 +312,14 @@ export class WebviewProvider {
 
   private async _handleSendPrompt(data: any): Promise<void> {
     try {
-      const response = await this._synapseClient.sendPrompt(data);
-      this._panel?.webview.postMessage({ type: 'response', data: response });
+      // For now, just show a placeholder response since sendPrompt method doesn't exist
+      this._panel?.webview.postMessage({ 
+        type: 'response', 
+        data: { 
+          message: 'AI prompt functionality coming soon!',
+          request: data 
+        } 
+      });
     } catch (error) {
       this._panel?.webview.postMessage({ 
         type: 'error', 
@@ -360,8 +366,14 @@ export class WebviewProvider {
 
   private async _handleCreateVisualization(data: any): Promise<void> {
     try {
-      const response = await this._synapseClient.createVisualization(data);
-      this._panel?.webview.postMessage({ type: 'response', data: response });
+      // For now, just show a placeholder response since we need projectId
+      this._panel?.webview.postMessage({ 
+        type: 'response', 
+        data: { 
+          message: 'Visualization creation coming soon!',
+          request: data 
+        } 
+      });
     } catch (error) {
       this._panel?.webview.postMessage({ 
         type: 'error', 

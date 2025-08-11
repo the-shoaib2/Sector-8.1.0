@@ -1,17 +1,17 @@
 import * as vscode from 'vscode';
-import { SectorProvider } from './providers/synapse-provider';
+import { SynapseProvider } from './providers/synapse-provider';
 import { WebviewProvider } from './providers/webview-provider';
 import { LoginProvider } from './providers/login-provider';
-import { SectorClient } from './clients/synapse-client';
+import { SynapseClient } from './clients/synapse-client';
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('Synapse Learning Platform extension is now active!');
 
   // Initialize Synapse client
-  const synapseClient = new SectorClient();
+  const synapseClient = new SynapseClient();
 
   // Register Synapse provider
-  const synapseProvider = new SectorProvider(synapseClient);
+  const synapseProvider = new SynapseProvider(synapseClient);
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider('synapse.projects', synapseProvider)
   );

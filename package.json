@@ -23,12 +23,16 @@
     "education"
   ],
   "activationEvents": [
+    "onStartupFinished",
     "onCommand:synapse.login",
+    "onCommand:synapse.logout",
     "onCommand:synapse.openProject",
     "onCommand:synapse.showAssistant",
     "onCommand:synapse.visualizeCode",
     "onCommand:synapse.analyzeContext",
-    "onWebviewPanel:synapse.visualization"
+    "onCommand:synapse.exportVisualization",
+    "onWebviewPanel:synapse.visualization",
+    "onView:synapse.projects"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -142,8 +146,12 @@
       "synapse": [
         {
           "id": "synapse.projects",
-          "name": "Projects",
-          "when": "synapse.isAuthenticated"
+          "name": "Projects"
+        },
+        {
+          "id": "synapse.login",
+          "name": "Login",
+          "when": "!synapse.isAuthenticated"
         },
         {
           "id": "synapse.assistant",

@@ -1,10 +1,10 @@
 import * as vscode from 'vscode';
-import { SectorClient } from '../clients/synapse-client';
+import { SynapseClient } from '../clients/synapse-client';
 
-export class SectorProvider implements vscode.WebviewViewProvider {
+export class SynapseProvider implements vscode.WebviewViewProvider {
   public static readonly viewType = 'synapse.projects';
 
-  constructor(private readonly synapseClient: SectorClient) {}
+  constructor(private readonly synapseClient: SynapseClient) {}
 
   public resolveWebviewView(
     webviewView: vscode.WebviewView,

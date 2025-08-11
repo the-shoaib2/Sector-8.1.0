@@ -60,7 +60,7 @@ export function registerCommands(context: vscode.ExtensionContext): vscode.Dispo
   disposables.push(
     vscode.commands.registerCommand('synapse.showAssistant', () => {
       // This will be handled by the WebviewProvider
-      vscode.window.showInformationMessage('Opening Sector AI Assistant...');
+      vscode.window.showInformationMessage('Opening Synapse AI Assistant...');
     })
   );
 
