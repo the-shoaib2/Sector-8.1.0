@@ -1,0 +1,36 @@
+{
+  "name": "@sector/database",
+  "version": "1.0.0",
+  "description": "Database schemas, migrations, and utilities for Sector Universal Learning Platform",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rimraf dist",
+    "db:migrate": "ts-node src/migrate.ts",
+    "db:seed": "ts-node src/seed.ts",
+    "db:generate": "typeorm migration:generate -d src/config/data-source.ts",
+    "db:run": "typeorm migration:run -d src/config/data-source.ts",
+    "db:revert": "typeorm migration:revert -d src/config/data-source.ts",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@sector/common": "workspace:*",
+    "typeorm": "^0.3.17",
+    "pg": "^8.11.3",
+    "sqlite3": "^5.1.6",
+    "reflect-metadata": "^0.1.13",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/pg": "^8.10.7",
+    "typescript": "^5.3.0",
+    "ts-node": "^10.9.1",
+    "rimraf": "^5.0.5"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -1,127 +1,205 @@
-# MNIST Digit Classifier
+# Sector Universal Learning Platform v8.1.0
 
-A deep learning model for handwritten digit recognition using PyTorch, with a Flask web interface for real-time predictions.
+> **Universal Intelligent Learning & Coding Assistant** - Advanced platform for learning programming, compilers, ML, AI with visualization, contextual AI, and multi-platform support.
 
-![MNIST Classifier Demo](https://img.shields.io/badge/PyTorch-1.9.0-EE4C2C?style=flat&logo=pytorch)
-![Flask](https://img.shields.io/badge/Flask-2.0.1-000000?style=flat&logo=flask)
-![Python](https://img.shields.io/badge/Python-3.8+-3776AB?style=flat&logo=python&logoColor=white)
+## 🚀 Project Vision
 
-## Features
+Sector is an all-in-one learning platform that helps users:
+- **Learn programming, compilers, ML, AI** through interactive visualizations
+- **Code with AI assistance** using low-latency streaming prompts
+- **Analyze documents contextually** with `@context` using Model Context Protocol (MCP)
+- **Visualize code execution** and data structures in real-time
+- **Work across platforms** - Web, VS Code, Desktop apps
 
-- **High Accuracy**: CNN-based model with >99% test accuracy on MNIST dataset
-- **Web Interface**: Interactive canvas for drawing digits
-- **REST API**: Endpoints for model inference and training
-- **Training Dashboard**: Monitor training progress in real-time
-- **Model Management**: Save and load trained models
+## 🏗️ Architecture Overview
 
-## Installation
+```
+[Frontend Web (React/TS)] <-----> [API Gateway (TS + Fastify + TypeORM + JWT)]
+                                         |
+                                         | (HTTP + WebSocket/SSE)
+                                         |
+                            +-------------------------+
+                            |       Message Bus        | (NATS/Redis/RabbitMQ)
+                            +-------------------------+
+                      /                  |                   \
+    [Runner Worker (Rust/Node)]   [AI Worker (Python)]   [Export Worker (Node/Python)]
+                     |                       |                      |
+                [Sandboxed containers]   [ML/DL inference]    [PDF/Image generation]
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/the-shoaib2/Sector-8.1.0.git
-   cd Sector-8.1.0
-   ```
+                                  +-----------------------+
+                                  |  Vector DB (Qdrant)   |
+                                  +-----------------------+
 
-2. **Create and activate virtual environment**
-   ```bash
-   python -m venv .venv
-   .\.venv\Scripts\activate  # Windows
-   # OR
-   source .venv/bin/activate  # Linux/Mac
-   ```
+                                  +-----------------------+
+                                  | Blob Storage (S3)     |
+                                  +-----------------------+
+```
 
-3. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
+## 🛠️ Technology Stack
 
-## Usage
+| Layer            | Technology / Library                     | Purpose                    |
+| ---------------- | ---------------------------------------- | -------------------------- |
+| Frontend         | React + TypeScript + Vite                | Fast dev, strong typing    |
+| API Server       | Node.js + TypeScript + Fastify + TypeORM | Fast, typed, extensible    |
+| Auth             | OAuth2 (GitHub & Google) + JWT + PKCE    | Secure, modern auth flows  |
+| Real-time        | WebSocket / Server-Sent Events           | Streaming AI tokens        |
+| DB               | PostgreSQL (cloud), SQLite (local/dev)   | Relational, JSONB support  |
+| Message Bus      | NATS / Redis Streams / RabbitMQ          | Async decoupling          |
+| Vector DB        | Qdrant / Pinecone / Milvus               | Document embeddings       |
+| Blob Storage     | AWS S3 / MinIO / GCS                     | Store docs, artifacts     |
+| Worker Languages | Python (ML) + Rust/Node (runner, export) | Best tools for each domain |
+| Containerization | Docker + Kubernetes (optional)           | Sandboxing & orchestration |
+| IDE Extensions   | VS Code (TS) + others                    | Wide user base            |
+| Desktop App      | Electron / Tauri + SQLite                | Cross platform local mode  |
 
-### 1. Train the Model
+## 📁 Project Structure
+
+```
+sector-universal-learning-platform/
+├── packages/                    # Shared packages
+│   ├── common/                 # Shared types, utilities, constants
+│   ├── database/               # Database schemas, migrations
+│   ├── auth/                   # Authentication utilities
+│   └── mcp/                    # Model Context Protocol server
+├── apps/                       # Main applications
+│   ├── web/                    # React web frontend
+│   ├── api/                    # Fastify API server
+│   ├── desktop/                # Electron/Tauri desktop app
+│   └── vscode-extension/       # VS Code extension
+├── workers/                     # Background workers
+│   ├── ai-worker/              # Python AI/ML worker
+│   ├── runner-worker/          # Rust/Node code execution worker
+│   └── export-worker/          # Export/PDF generation worker
+├── docker/                      # Docker configurations
+├── docs/                        # Documentation
+└── scripts/                     # Build and deployment scripts
+```
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 18+
+- pnpm 8+
+- Docker & Docker Compose
+- PostgreSQL (or use Docker)
+
+### Setup
 ```bash
-python train_model.py
+# Clone and install dependencies
+git clone <repository-url>
+cd sector-universal-learning-platform
+pnpm install
+
+# Start development environment
+pnpm run setup
+
+# Start all services
+pnpm run dev
 ```
 
-### 2. Start the Web Application
+### Development Commands
 ```bash
-python app.py
+pnpm run dev          # Start all services in development mode
+pnpm run build        # Build all packages
+pnpm run test         # Run tests across all packages
+pnpm run lint         # Lint all packages
+pnpm run docker:up    # Start Docker services
+pnpm run docker:down  # Stop Docker services
 ```
 
-Open your browser and navigate to: http://127.0.0.1:5000
+## 🔑 Key Features
 
-### 3. Make Predictions
-- Draw a digit on the canvas
-- Click "Predict" to see the model's prediction
-- Click "Clear" to clear the canvas
-- Use "Random Test Image" to test with MNIST test samples
+### 1. **User Authentication**
+- OAuth2 with GitHub & Google
+- JWT + refresh tokens
+- Secure token sharing between web & extensions
 
-## Project Structure
+### 2. **Project & Workspace Management**
+- CRUD for projects, source files, runs
+- Multi-language support
+- Execution history and traces
 
-```
-.
-├── app.py                 # Flask application
-├── train_model.py        # Training script
-├── requirements.txt      # Python dependencies
-├── models/               # Saved models
-├── data/                 # MNIST dataset
-├── src/                  # Source code
-│   └── models/
-│       └── mnist_classifier.py  # Model definition
-└── templates/            # HTML templates
-    ├── index.html
-    └── mnist.html
-```
+### 3. **AI Assistant & Streaming**
+- Low-latency token streaming
+- Context-aware prompts
+- Project code integration
 
-## API Endpoints
+### 4. **Contextual Document Analysis (`@context`)**
+- Upload PDFs, books, documents
+- Vector embeddings and retrieval
+- MCP server for context-aware AI responses
+- Provenance tracking
 
-- `GET /` - Home page
-- `POST /predict` - Predict digit from image
-  ```json
-  {
-    "image": "base64_encoded_image"
-  }
-  ```
-- `GET /model-status` - Get model status and metrics
-- `POST /retrain` - Retrain the model
+### 5. **Interactive Visualizations**
+- Code execution trees
+- Data structure animations
+- Compiler phases & AST walks
+- Neural network architectures
 
-## Model Architecture
+### 6. **Multi-Platform Support**
+- Web application
+- VS Code extension
+- Desktop application
+- API for integrations
 
-The model uses a CNN architecture with:
-- 2 Convolutional blocks (Conv2D + BatchNorm + ReLU + MaxPool + Dropout)
-- 2 Fully connected layers
-- Dropout for regularization
-- AdamW optimizer with learning rate scheduling
+### 7. **Export & Sharing**
+- PDF, PNG, JPEG export
+- Office formats (DOCX, PPTX)
+- Shareable links with permissions
 
-## Training
+## 🔌 API Endpoints
 
-### Data Augmentation
-- Random rotation (±10 degrees)
-- Random translation (±10%)
-- Random scaling (0.9-1.1x)
-- Random erasing
+| Method | Path                          | Description                      |
+| ------ | ----------------------------- | -------------------------------- |
+| POST   | `/auth/oauth/start`           | Redirect to OAuth provider       |
+| POST   | `/auth/token/refresh`         | Refresh JWT token                |
+| GET    | `/me`                         | Get current user profile         |
+| GET    | `/projects`                   | List user projects               |
+| POST   | `/projects`                   | Create project                   |
+| POST   | `/projects/:id/runs`          | Create run job                   |
+| GET    | `/runs/:id/events`            | WebSocket stream for run events  |
+| POST   | `/prompts`                    | Submit AI prompt                 |
+| GET    | `/prompts/:id/stream`         | AI token streaming endpoint      |
+| POST   | `/context/session`            | Start MCP context session        |
+| POST   | `/context/session/:id/prompt` | Send prompt within context       |
+| POST   | `/documents`                  | Upload document                  |
+| GET    | `/artifacts/:id`              | Download exported artifacts      |
 
-### Hyperparameters
-- Batch size: 128
-- Learning rate: 0.001
-- Epochs: 15 (with early stopping)
-- Optimizer: AdamW
-- Loss: Cross Entropy
+## 🧪 Development Workflow
 
-## Troubleshooting
+1. **Phase 1**: Core API + Auth + Project CRUD + Basic streaming
+2. **Phase 2**: AI assistant + Document upload + Export worker
+3. **Phase 3**: Context sessions + MCP server + Multi-language adapters
+4. **Phase 4**: Advanced visualizations + Marketplace + Scaling
 
-- **Missing Dependencies**: Ensure all packages in `requirements.txt` are installed
-- **Port in Use**: If port 5000 is in use, change it in `app.py`
-- **Model Not Learning**: Try adjusting the learning rate or training for more epochs
-- **Browser Issues**: Clear cache or try a different browser if UI doesn't load properly
+## 🔒 Security & Privacy
 
-## License
+- JWT + refresh tokens
+- OAuth2 with PKCE
+- Sandboxed code execution
+- Encrypted document storage
+- Rate limiting & quotas
+- Audit logging
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Contributing
+## 🤝 Contributing
 
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+2. Create a feature branch
+3. Make your changes
+4. Add tests
+5. Submit a pull request
+
+## 📄 License
+
+MIT License - see [LICENSE](LICENSE) file for details.
+
+## 🆘 Support
+
+- [Documentation](docs/)
+- [Issues](https://github.com/your-org/sector/issues)
+- [Discussions](https://github.com/your-org/sector/discussions)
+
+---
+
+**Built with ❤️ for the learning community**
+
