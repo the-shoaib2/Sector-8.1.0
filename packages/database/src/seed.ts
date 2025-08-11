@@ -31,7 +31,7 @@ async function seedDatabase() {
     
     // Create sample user
     const sampleUser = userRepository.create({
-      email: 'demo@sector.local',
+      email: 'demo@synapse.local',
       username: 'demo',
       displayName: 'Demo User',
       role: 'student' as any,

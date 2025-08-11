@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { SectorProvider } from './providers/synapse-provider';
 import { WebviewProvider } from './providers/webview-provider';
+import { LoginProvider } from './providers/login-provider';
 import { SectorClient } from './clients/synapse-client';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -18,16 +19,33 @@ export function activate(context: vscode.ExtensionContext) {
   // Register Webview provider
   const webviewProvider = new WebviewProvider(context.extensionUri, synapseClient);
 
+  // Register Login provider
+  const loginProvider = new LoginProvider(context.extensionUri, synapseClient);
+
   // Register commands
   context.subscriptions.push(
     vscode.commands.registerCommand('synapse.login', () => {
-      vscode.window.showInformationMessage('Synapse: Login functionality coming soon!');
+      loginProvider.showLogin();
     })
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('synapse.logout', () => {
-      vscode.window.showInformationMessage('Synapse: Logout functionality coming soon!');
+    vscode.commands.registerCommand('synapse.logout', async () => {
+      try {
+        await synapseClient.logout();
+        
+        // Clear stored token
+        vscode.workspace.getConfiguration('synapse').update('authToken', undefined, vscode.ConfigurationTarget.Global);
+        
+        vscode.window.showInformationMessage('Successfully logged out of Synapse');
+        
+        // Refresh the projects view to show login state
+        vscode.commands.executeCommand('workbench.action.reloadWindow');
+        
+      } catch (error) {
+        console.error('Logout failed:', error);
+        vscode.window.showErrorMessage('Logout failed. Please try again.');
+      }
     })
   );
 
@@ -70,6 +88,13 @@ export function activate(context: vscode.ExtensionContext) {
       vscode.window.showInformationMessage('Synapse: Export visualization functionality coming soon!');
     })
   );
+
+  // Check if user is already authenticated
+  const authToken = vscode.workspace.getConfiguration('synapse').get('authToken');
+  if (authToken) {
+    synapseClient.setToken(authToken as string);
+    console.log('User already authenticated with Synapse');
+  }
 }
 
 export function deactivate() {

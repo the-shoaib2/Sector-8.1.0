@@ -14,7 +14,7 @@ Get the Sector Universal Learning Platform up and running in **under 10 minutes*
 ```bash
 # Clone the repository
 git clone <your-repo-url>
-cd sector-universal-learning-platform
+cd synapse-universal-learning-platform
 
 # Make setup script executable and run it
 chmod +x scripts/setup.sh
@@ -41,7 +41,7 @@ pnpm run dev
 - **Web App**: http://localhost:3000
 - **API Server**: http://localhost:3001
 - **API Health**: http://localhost:3001/health
-- **pgAdmin**: http://localhost:5050 (admin@sector.local / admin_password)
+- **pgAdmin**: http://localhost:5050 (admin@synapse.local / admin_password)
 - **MinIO Console**: http://localhost:9001 (sector_admin / sector_admin_password)
 
 ## 🧪 Test the Platform

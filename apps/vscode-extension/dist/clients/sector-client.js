@@ -128,4 +128,4 @@ class SectorClient {
     }
 }
 exports.SectorClient = SectorClient;
-//# sourceMappingURL=sector-client.js.map
+//# sourceMappingURL=synapse-client.js.map

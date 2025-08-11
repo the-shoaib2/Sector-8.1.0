@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { SectorClient } from '../clients/sector-client';
+import { SectorClient } from '../clients/synapse-client';
 export declare class WebviewProvider {
     private readonly _extensionUri;
     private readonly _synapseClient;

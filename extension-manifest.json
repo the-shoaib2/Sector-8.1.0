@@ -1,0 +1,58 @@
+{
+  "name": "synapse-learning-platform",
+  "displayName": "Synapse Learning Platform",
+  "description": "Universal Intelligent Learning & Coding Assistant for VS Code",
+  "version": "1.0.0",
+  "publisher": "synapse",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "main": "./extension.js",
+  "activationEvents": [
+    "onCommand:synapse.login",
+    "onCommand:synapse.openProject",
+    "onCommand:synapse.showAssistant",
+    "onCommand:synapse.visualizeCode",
+    "onCommand:synapse.analyzeContext",
+    "onWebviewPanel:synapse.visualization"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "synapse.login",
+        "title": "Synapse: Login",
+        "category": "Synapse"
+      },
+      {
+        "command": "synapse.logout",
+        "title": "Synapse: Logout",
+        "category": "Synapse"
+      },
+      {
+        "command": "synapse.openProject",
+        "title": "Synapse: Open Project",
+        "category": "Synapse"
+      },
+      {
+        "command": "synapse.showAssistant",
+        "title": "Synapse: AI Assistant",
+        "category": "Synapse"
+      },
+      {
+        "command": "synapse.visualizeCode",
+        "title": "Synapse: Visualize Code",
+        "category": "Synapse"
+      },
+      {
+        "command": "synapse.analyzeContext",
+        "title": "Synapse: Analyze Context",
+        "category": "Synapse"
+      },
+      {
+        "command": "synapse.exportVisualization",
+        "title": "Synapse: Export Visualization",
+        "category": "Synapse"
+      }
+    ]
+  }
+}

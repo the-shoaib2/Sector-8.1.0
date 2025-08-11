@@ -1,29 +1,182 @@
 {
-  "name": "synapse",
+  "name": "synapse-learning-platform",
+  "displayName": "Synapse Learning Platform",
+  "description": "Universal Intelligent Learning & Coding Assistant for VS Code",
   "version": "1.0.0",
-  "description": "Synapse - Universal Intelligent Learning & Coding Assistant Platform",
-  "private": true,
+  "publisher": "synapse",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other",
+    "Programming Languages",
+    "Machine Learning",
+    "Education"
+  ],
+  "keywords": [
+    "learning",
+    "coding",
+    "ai",
+    "visualization",
+    "compiler",
+    "ml",
+    "education"
+  ],
+  "activationEvents": [
+    "onCommand:synapse.login",
+    "onCommand:synapse.openProject",
+    "onCommand:synapse.showAssistant",
+    "onCommand:synapse.visualizeCode",
+    "onCommand:synapse.analyzeContext",
+    "onWebviewPanel:synapse.visualization"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "synapse.login",
+        "title": "Synapse: Login",
+        "category": "Synapse"
+      },
+      {
+        "command": "synapse.logout",
+        "title": "Synapse: Logout",
+        "category": "Synapse"
+      },
+      {
+        "command": "synapse.openProject",
+        "title": "Synapse: Open Project",
+        "category": "Synapse"
+      },
+      {
+        "command": "synapse.showAssistant",
+        "title": "Synapse: AI Assistant",
+        "category": "Synapse"
+      },
+      {
+        "command": "synapse.visualizeCode",
+        "title": "Synapse: Visualize Code",
+        "category": "Synapse"
+      },
+      {
+        "command": "synapse.analyzeContext",
+        "title": "Synapse: Analyze Context",
+        "category": "Synapse"
+      },
+      {
+        "command": "synapse.exportVisualization",
+        "title": "Synapse: Export Visualization",
+        "category": "Synapse"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "synapse.login",
+          "when": "!synapse.isAuthenticated"
+        },
+        {
+          "command": "synapse.logout",
+          "when": "synapse.isAuthenticated"
+        },
+        {
+          "command": "synapse.openProject",
+          "when": "synapse.isAuthenticated"
+        },
+        {
+          "command": "synapse.showAssistant",
+          "when": "synapse.isAuthenticated"
+        },
+        {
+          "command": "synapse.visualizeCode",
+          "when": "synapse.isAuthenticated"
+        },
+        {
+          "command": "synapse.analyzeContext",
+          "when": "synapse.isAuthenticated"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "synapse.visualizeCode",
+          "when": "synapse.isAuthenticated && editorTextFocus",
+          "group": "synapse"
+        },
+        {
+          "command": "synapse.analyzeContext",
+          "when": "synapse.isAuthenticated && editorTextFocus",
+          "group": "synapse"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Synapse Learning Platform",
+      "properties": {
+        "synapse.apiUrl": {
+          "type": "string",
+          "default": "http://localhost:3001",
+          "description": "Synapse API server URL"
+        },
+        "synapse.autoLogin": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically login on startup"
+        },
+        "synapse.showNotifications": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show notifications from Synapse"
+        }
+      }
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "synapse",
+          "title": "Synapse Learning",
+          "icon": "resources/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "synapse": [
+        {
+          "id": "synapse.projects",
+          "name": "Projects",
+          "when": "synapse.isAuthenticated"
+        },
+        {
+          "id": "synapse.assistant",
+          "name": "AI Assistant",
+          "when": "synapse.isAuthenticated"
+        },
+        {
+          "id": "synapse.visualizations",
+          "name": "Visualizations",
+          "when": "synapse.isAuthenticated"
+        }
+      ]
+    }
+  },
   "scripts": {
-    "dev": "pnpm -r run dev",
-    "build": "pnpm -r run build",
-    "test": "pnpm -r run test",
-    "lint": "pnpm -r run lint",
-    "clean": "pnpm -r run clean",
-    "docker:up": "docker-compose up -d",
-    "docker:down": "docker-compose down",
-    "setup": "pnpm install && pnpm docker:up",
-    "db:migrate": "pnpm --filter @synapse/database run db:migrate",
-    "db:seed": "pnpm --filter @synapse/database run db:seed"
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src --ext .ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.2",
+    "ws": "^8.14.2"
   },
   "devDependencies": {
+    "@types/vscode": "^1.74.0",
     "@types/node": "^20.10.0",
-    "typescript": "^5.3.0",
-    "pnpm": "^8.15.0"
-  },
-  "engines": {
-    "node": ">=18.0.0",
-    "pnpm": ">=8.0.0"
-  },
-  "packageManager": "pnpm@8.15.0"
+    "@types/ws": "^8.5.10",
+    "@typescript-eslint/eslint-plugin": "^6.14.0",
+    "@typescript-eslint/parser": "^6.14.0",
+    "eslint": "^8.55.0",
+    "typescript": "^5.3.0"
+  }
 }
 
