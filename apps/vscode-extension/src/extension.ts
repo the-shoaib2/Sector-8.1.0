@@ -4,47 +4,47 @@ import { WebviewProvider } from './providers/webview-provider';
 import { SectorClient } from './clients/sector-client';
 
 export function activate(context: vscode.ExtensionContext) {
-  console.log('Sector Learning Platform extension is now active!');
+  console.log('Synapse Learning Platform extension is now active!');
 
-  // Initialize Sector client
-  const sectorClient = new SectorClient();
+  // Initialize Synapse client
+  const synapseClient = new SectorClient();
 
-  // Register Sector provider
-  const sectorProvider = new SectorProvider(sectorClient);
+  // Register Synapse provider
+  const synapseProvider = new SectorProvider(synapseClient);
   context.subscriptions.push(
-    vscode.window.registerWebviewViewProvider('sector.projects', sectorProvider)
+    vscode.window.registerWebviewViewProvider('synapse.projects', synapseProvider)
   );
 
   // Register Webview provider
-  const webviewProvider = new WebviewProvider(context.extensionUri, sectorClient);
+  const webviewProvider = new WebviewProvider(context.extensionUri, synapseClient);
 
   // Register commands
   context.subscriptions.push(
-    vscode.commands.registerCommand('sector.login', () => {
-      vscode.window.showInformationMessage('Sector: Login functionality coming soon!');
+    vscode.commands.registerCommand('synapse.login', () => {
+      vscode.window.showInformationMessage('Synapse: Login functionality coming soon!');
     })
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('sector.logout', () => {
-      vscode.window.showInformationMessage('Sector: Logout functionality coming soon!');
+    vscode.commands.registerCommand('synapse.logout', () => {
+      vscode.window.showInformationMessage('Synapse: Logout functionality coming soon!');
     })
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('sector.openProject', () => {
-      vscode.window.showInformationMessage('Sector: Open project functionality coming soon!');
+    vscode.commands.registerCommand('synapse.openProject', () => {
+      vscode.window.showInformationMessage('Synapse: Open project functionality coming soon!');
     })
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('sector.showAssistant', () => {
+    vscode.commands.registerCommand('synapse.showAssistant', () => {
       webviewProvider.showAssistant();
     })
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('sector.visualizeCode', () => {
+    vscode.commands.registerCommand('synapse.visualizeCode', () => {
       const editor = vscode.window.activeTextEditor;
       if (editor) {
         webviewProvider.showVisualization(editor.document.uri);
@@ -55,7 +55,7 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('sector.analyzeContext', () => {
+    vscode.commands.registerCommand('synapse.analyzeContext', () => {
       const editor = vscode.window.activeTextEditor;
       if (editor) {
         webviewProvider.showContextAnalysis(editor.document.uri);
@@ -66,12 +66,12 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   context.subscriptions.push(
-    vscode.commands.registerCommand('sector.exportVisualization', () => {
-      vscode.window.showInformationMessage('Sector: Export visualization functionality coming soon!');
+    vscode.commands.registerCommand('synapse.exportVisualization', () => {
+      vscode.window.showInformationMessage('Synapse: Export visualization functionality coming soon!');
     })
   );
 }
 
 export function deactivate() {
-  console.log('Sector Learning Platform extension is now deactivated!');
+  console.log('Synapse Learning Platform extension is now deactivated!');
 }

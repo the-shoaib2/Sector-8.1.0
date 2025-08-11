@@ -1,34 +1,24 @@
 {
-  "name": "sector-universal-learning-platform",
-  "version": "8.1.0",
-  "description": "Universal Intelligent Learning & Coding Assistant - Advanced platform for learning programming, compilers, ML, AI with visualization, contextual AI, and multi-platform support",
+  "name": "synapse",
+  "version": "1.0.0",
+  "description": "Synapse - Universal Intelligent Learning & Coding Assistant Platform",
   "private": true,
-  "workspaces": [
-    "packages/*",
-    "apps/*",
-    "workers/*"
-  ],
   "scripts": {
-    "dev": "pnpm run --parallel dev",
-    "build": "pnpm run --recursive build",
-    "test": "pnpm run --recursive test",
-    "lint": "pnpm run --recursive lint",
-    "clean": "pnpm run --recursive clean",
+    "dev": "pnpm -r run dev",
+    "build": "pnpm -r run build",
+    "test": "pnpm -r run test",
+    "lint": "pnpm -r run lint",
+    "clean": "pnpm -r run clean",
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",
-    "setup": "pnpm install && pnpm run docker:up && pnpm run db:migrate",
-    "db:migrate": "cd packages/api && pnpm run db:migrate",
-    "db:seed": "cd packages/api && pnpm run db:seed"
+    "setup": "pnpm install && pnpm docker:up",
+    "db:migrate": "pnpm --filter @synapse/database run db:migrate",
+    "db:seed": "pnpm --filter @synapse/database run db:seed"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
     "typescript": "^5.3.0",
-    "prettier": "^3.1.0",
-    "eslint": "^8.55.0",
-    "@typescript-eslint/eslint-plugin": "^6.13.0",
-    "@typescript-eslint/parser": "^6.13.0",
-    "husky": "^8.0.3",
-    "lint-staged": "^15.2.0"
+    "pnpm": "^8.15.0"
   },
   "engines": {
     "node": ">=18.0.0",

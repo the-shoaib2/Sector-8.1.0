@@ -1,0 +1,38 @@
+{
+  "folders": [
+    {
+      "name": "Synapse Platform",
+      "path": "."
+    }
+  ],
+  "settings": {
+    "typescript.preferences.includePackageJsonAutoImports": "on",
+    "typescript.suggest.autoImports": true,
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    },
+    "files.exclude": {
+      "**/node_modules": true,
+      "**/dist": true,
+      "**/out": true,
+      "**/.git": true,
+      "**/.DS_Store": true
+    },
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/dist": true,
+      "**/out": true
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "ms-vscode.vscode-typescript-next",
+      "esbenp.prettier-vscode",
+      "dbaeumer.vscode-eslint",
+      "bradlc.vscode-tailwindcss",
+      "ms-vscode.vscode-json"
+    ]
+  }
+}

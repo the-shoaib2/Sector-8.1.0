@@ -1,14 +1,14 @@
 {
-  "name": "@sector/common",
+  "name": "@synapse/common",
   "version": "1.0.0",
-  "description": "Shared types, utilities, and constants for Sector Universal Learning Platform",
+  "description": "Shared types, utilities, and constants for Synapse platform",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch",
     "clean": "rimraf dist",
-    "test": "jest",
+    "test": "vitest",
     "lint": "eslint src --ext .ts"
   },
   "dependencies": {
@@ -18,12 +18,8 @@
   },
   "devDependencies": {
     "@types/uuid": "^9.0.7",
-    "@types/node": "^20.10.0",
     "typescript": "^5.3.0",
     "rimraf": "^5.0.5"
-  },
-  "publishConfig": {
-    "access": "public"
   }
 }
 

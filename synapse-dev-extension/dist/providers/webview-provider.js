@@ -1,79 +1,97 @@
-import * as vscode from 'vscode';
-import { SectorClient } from '../clients/sector-client';
-
-export class WebviewProvider {
-  private readonly _viewType = 'synapse.webview';
-  private _panel: vscode.WebviewPanel | undefined = undefined;
-
-  constructor(
-    private readonly _extensionUri: vscode.Uri,
-    private readonly _synapseClient: SectorClient
-  ) {}
-
-  showAssistant(): void {
-    this._showWebview('Synapse AI Assistant', 'assistant');
-  }
-
-  showVisualization(uri: vscode.Uri): void {
-    this._showWebview('Code Visualization', 'visualization', { uri: uri.toString() });
-  }
-
-  showContextAnalysis(uri: vscode.Uri): void {
-    this._showWebview('Context Analysis', 'context', { uri: uri.toString() });
-  }
-
-  private _showWebview(title: string, type: string, data?: any): void {
-    const column = vscode.window.activeTextEditor
-      ? vscode.window.activeTextEditor.viewColumn
-      : undefined;
-
-    if (this._panel) {
-      this._panel.reveal(column);
-      this._panel.webview.postMessage({ type: 'update', data });
-      return;
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
     }
-
-    this._panel = vscode.window.createWebviewPanel(
-      this._viewType,
-      title,
-      column || vscode.ViewColumn.One,
-      {
-        enableScripts: true,
-        localResourceRoots: [
-          vscode.Uri.joinPath(this._extensionUri, 'media'),
-          vscode.Uri.joinPath(this._extensionUri, 'out/compiled'),
-        ],
-      }
-    );
-
-    this._panel.webview.html = this._getHtmlForWebview(this._panel.webview, type, data);
-
-    this._panel.webview.onDidReceiveMessage(
-      message => {
-        switch (message.command) {
-          case 'sendPrompt':
-            this._handleSendPrompt(message.data);
-            break;
-          case 'executeCode':
-            this._handleExecuteCode(message.data);
-            break;
-          case 'analyzeContext':
-            this._handleAnalyzeContext(message.data);
-            break;
-          case 'createVisualization':
-            this._handleCreateVisualization(message.data);
-            break;
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.WebviewProvider = void 0;
+const vscode = __importStar(require("vscode"));
+class WebviewProvider {
+    _extensionUri;
+    _synapseClient;
+    _viewType = 'synapse.webview';
+    _panel = undefined;
+    constructor(_extensionUri, _synapseClient) {
+        this._extensionUri = _extensionUri;
+        this._synapseClient = _synapseClient;
+    }
+    showAssistant() {
+        this._showWebview('Synapse AI Assistant', 'assistant');
+    }
+    showVisualization(uri) {
+        this._showWebview('Code Visualization', 'visualization', { uri: uri.toString() });
+    }
+    showContextAnalysis(uri) {
+        this._showWebview('Context Analysis', 'context', { uri: uri.toString() });
+    }
+    _showWebview(title, type, data) {
+        const column = vscode.window.activeTextEditor
+            ? vscode.window.activeTextEditor.viewColumn
+            : undefined;
+        if (this._panel) {
+            this._panel.reveal(column);
+            this._panel.webview.postMessage({ type: 'update', data });
+            return;
         }
-      }
-    );
-
-    this._panel.onDidDispose(() => {
-      this._panel = undefined;
-    });
-  }
-
-  private _getHtmlForWebview(webview: vscode.Webview, type: string, data?: any): string {
-    const baseHtml = `<!DOCTYPE html>
+        this._panel = vscode.window.createWebviewPanel(this._viewType, title, column || vscode.ViewColumn.One, {
+            enableScripts: true,
+            localResourceRoots: [
+                vscode.Uri.joinPath(this._extensionUri, 'media'),
+                vscode.Uri.joinPath(this._extensionUri, 'out/compiled'),
+            ],
+        });
+        this._panel.webview.html = this._getHtmlForWebview(this._panel.webview, type, data);
+        this._panel.webview.onDidReceiveMessage(message => {
+            switch (message.command) {
+                case 'sendPrompt':
+                    this._handleSendPrompt(message.data);
+                    break;
+                case 'executeCode':
+                    this._handleExecuteCode(message.data);
+                    break;
+                case 'analyzeContext':
+                    this._handleAnalyzeContext(message.data);
+                    break;
+                case 'createVisualization':
+                    this._handleCreateVisualization(message.data);
+                    break;
+            }
+        });
+        this._panel.onDidDispose(() => {
+            this._panel = undefined;
+        });
+    }
+    _getHtmlForWebview(webview, type, data) {
+        const baseHtml = `<!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -171,23 +189,21 @@ export class WebviewProvider {
                 <div class="title">Synapse</div>
                 <p>Universal Learning Platform</p>
             </div>`;
-
-    let contentHtml = '';
-    switch (type) {
-      case 'assistant':
-        contentHtml = this._getAssistantHtml();
-        break;
-      case 'visualization':
-        contentHtml = this._getVisualizationHtml(data);
-        break;
-      case 'context':
-        contentHtml = this._getContextAnalysisHtml(data);
-        break;
-      default:
-        contentHtml = '<p>Unknown view type</p>';
-    }
-
-    const footerHtml = `
+        let contentHtml = '';
+        switch (type) {
+            case 'assistant':
+                contentHtml = this._getAssistantHtml();
+                break;
+            case 'visualization':
+                contentHtml = this._getVisualizationHtml(data);
+                break;
+            case 'context':
+                contentHtml = this._getContextAnalysisHtml(data);
+                break;
+            default:
+                contentHtml = '<p>Unknown view type</p>';
+        }
+        const footerHtml = `
         </div>
         <script>
             const vscode = acquireVsCodeApi();
@@ -262,12 +278,10 @@ export class WebviewProvider {
         </script>
     </body>
     </html>`;
-
-    return baseHtml + contentHtml + footerHtml;
-  }
-
-  private _getAssistantHtml(): string {
-    return `
+        return baseHtml + contentHtml + footerHtml;
+    }
+    _getAssistantHtml() {
+        return `
         <div class="input-group">
             <label for="promptMessage">Ask me anything about programming, AI, or learning:</label>
             <textarea id="promptMessage" placeholder="e.g., Explain how neural networks work, or help me debug this code..."></textarea>
@@ -276,10 +290,9 @@ export class WebviewProvider {
         <div id="output" class="output">
             <div class="loading">Ready to help! Ask me anything.</div>
         </div>`;
-  }
-
-  private _getVisualizationHtml(data?: any): string {
-    return `
+    }
+    _getVisualizationHtml(data) {
+        return `
         <div class="input-group">
             <label for="language">Programming Language:</label>
             <input type="text" id="language" placeholder="e.g., python, javascript, java" value="python">
@@ -296,10 +309,9 @@ export class WebviewProvider {
         <div id="output" class="output">
             <div class="loading">Ready to execute and visualize code.</div>
         </div>`;
-  }
-
-  private _getContextAnalysisHtml(data?: any): string {
-    return `
+    }
+    _getContextAnalysisHtml(data) {
+        return `
         <div class="input-group">
             <label for="contextQuery">Ask about your uploaded documents:</label>
             <textarea id="contextQuery" placeholder="e.g., What are the main concepts in this document? How does this relate to machine learning?"></textarea>
@@ -308,65 +320,67 @@ export class WebviewProvider {
         <div id="output" class="output">
             <div class="loading">Ready to analyze your documents.</div>
         </div>`;
-  }
-
-  private async _handleSendPrompt(data: any): Promise<void> {
-    try {
-      const response = await this._synapseClient.sendPrompt(data);
-      this._panel?.webview.postMessage({ type: 'response', data: response });
-    } catch (error) {
-      this._panel?.webview.postMessage({ 
-        type: 'error', 
-        message: error instanceof Error ? error.message : 'Failed to send prompt' 
-      });
     }
-  }
-
-  private async _handleExecuteCode(data: any): Promise<void> {
-    try {
-      // For now, just show a placeholder response
-      this._panel?.webview.postMessage({ 
-        type: 'response', 
-        data: { 
-          message: 'Code execution and visualization coming soon!',
-          request: data 
-        } 
-      });
-    } catch (error) {
-      this._panel?.webview.postMessage({ 
-        type: 'error', 
-        message: error instanceof Error ? error.message : 'Failed to execute code' 
-      });
+    async _handleSendPrompt(data) {
+        try {
+            const response = await this._synapseClient.sendPrompt(data);
+            this._panel?.webview.postMessage({ type: 'response', data: response });
+        }
+        catch (error) {
+            this._panel?.webview.postMessage({
+                type: 'error',
+                message: error instanceof Error ? error.message : 'Failed to send prompt'
+            });
+        }
     }
-  }
-
-  private async _handleAnalyzeContext(data: any): Promise<void> {
-    try {
-      // For now, just show a placeholder response
-      this._panel?.webview.postMessage({ 
-        type: 'response', 
-        data: { 
-          message: 'Context analysis coming soon!',
-          request: data 
-        } 
-      });
-    } catch (error) {
-      this._panel?.webview.postMessage({ 
-        type: 'error', 
-        message: error instanceof Error ? error.message : 'Failed to analyze context' 
-      });
+    async _handleExecuteCode(data) {
+        try {
+            // For now, just show a placeholder response
+            this._panel?.webview.postMessage({
+                type: 'response',
+                data: {
+                    message: 'Code execution and visualization coming soon!',
+                    request: data
+                }
+            });
+        }
+        catch (error) {
+            this._panel?.webview.postMessage({
+                type: 'error',
+                message: error instanceof Error ? error.message : 'Failed to execute code'
+            });
+        }
     }
-  }
-
-  private async _handleCreateVisualization(data: any): Promise<void> {
-    try {
-      const response = await this._synapseClient.createVisualization(data);
-      this._panel?.webview.postMessage({ type: 'response', data: response });
-    } catch (error) {
-      this._panel?.webview.postMessage({ 
-        type: 'error', 
-        message: error instanceof Error ? error.message : 'Failed to create visualization' 
-      });
+    async _handleAnalyzeContext(data) {
+        try {
+            // For now, just show a placeholder response
+            this._panel?.webview.postMessage({
+                type: 'response',
+                data: {
+                    message: 'Context analysis coming soon!',
+                    request: data
+                }
+            });
+        }
+        catch (error) {
+            this._panel?.webview.postMessage({
+                type: 'error',
+                message: error instanceof Error ? error.message : 'Failed to analyze context'
+            });
+        }
     }
-  }
+    async _handleCreateVisualization(data) {
+        try {
+            const response = await this._synapseClient.createVisualization(data);
+            this._panel?.webview.postMessage({ type: 'response', data: response });
+        }
+        catch (error) {
+            this._panel?.webview.postMessage({
+                type: 'error',
+                message: error instanceof Error ? error.message : 'Failed to create visualization'
+            });
+        }
+    }
 }
+exports.WebviewProvider = WebviewProvider;
+//# sourceMappingURL=webview-provider.js.map

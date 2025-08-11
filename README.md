@@ -1,75 +1,125 @@
-# Sector Universal Learning Platform v8.1.0
+# Synapse - Universal Intelligent Learning & Coding Assistant Platform
 
-> **Universal Intelligent Learning & Coding Assistant** - Advanced platform for learning programming, compilers, ML, AI with visualization, contextual AI, and multi-platform support.
+> **Synapse** - Where learning, coding, and AI converge to create the future of intelligent education.
 
-## 🚀 Project Vision
+## 🧠 Vision
 
-Sector is an all-in-one learning platform that helps users:
-- **Learn programming, compilers, ML, AI** through interactive visualizations
-- **Code with AI assistance** using low-latency streaming prompts
-- **Analyze documents contextually** with `@context` using Model Context Protocol (MCP)
-- **Visualize code execution** and data structures in real-time
-- **Work across platforms** - Web, VS Code, Desktop apps
+Synapse is a comprehensive, AI-powered platform that revolutionizes how we learn programming, understand complex systems, and interact with artificial intelligence. It's designed to be the ultimate companion for developers, students, educators, and AI enthusiasts.
 
-## 🏗️ Architecture Overview
+## ✨ Key Features
+
+### 🎯 **Intelligent Learning Assistant**
+- **AI-Powered Tutoring**: Get personalized explanations, code reviews, and learning paths
+- **Context-Aware Help**: Upload documents and get AI assistance based on your specific context
+- **Multi-Language Support**: Learn Python, JavaScript, Java, C++, Rust, Go, and more
+- **Interactive Explanations**: Visual representations of complex programming concepts
+
+### 🔍 **Advanced Code Visualization**
+- **Real-Time Execution Tracing**: See your code execute step-by-step with variable tracking
+- **Data Structure Visualization**: Interactive diagrams for arrays, trees, graphs, and more
+- **Algorithm Animation**: Watch sorting, searching, and graph algorithms in action
+- **Compiler Internals**: Visualize parsing, AST construction, and optimization passes
+
+### 🤖 **AI Integration & Context Analysis**
+- **Model Context Protocol (MCP)**: Secure, contextual AI queries based on your documents
+- **Low-Latency Streaming**: Real-time AI responses for seamless interaction
+- **Document Intelligence**: Upload PDFs, docs, and get AI-powered insights
+- **Code Generation**: AI-assisted coding with full context awareness
+
+### 🌐 **Multi-Platform Accessibility**
+- **Web Application**: Full-featured browser-based interface
+- **VS Code Extension**: Integrated development experience
+- **Desktop Application**: Native apps for Windows, macOS, and Linux
+- **Mobile Responsive**: Access from any device, anywhere
+
+### 🔐 **Enterprise-Grade Security**
+- **OAuth2 Authentication**: Secure login with GitHub, Google, and custom providers
+- **Role-Based Access Control**: Granular permissions for teams and organizations
+- **Data Encryption**: End-to-end encryption for sensitive information
+- **Audit Logging**: Comprehensive activity tracking and compliance
+
+### 📊 **Advanced Analytics & Export**
+- **Learning Analytics**: Track progress, identify gaps, and optimize learning paths
+- **Export Capabilities**: PDF, images, Office formats for reports and presentations
+- **Collaboration Tools**: Share visualizations and insights with teams
+- **API Integration**: Connect with existing tools and workflows
+
+## 🏗️ Architecture
 
 ```
-[Frontend Web (React/TS)] <-----> [API Gateway (TS + Fastify + TypeORM + JWT)]
-                                         |
-                                         | (HTTP + WebSocket/SSE)
-                                         |
-                            +-------------------------+
-                            |       Message Bus        | (NATS/Redis/RabbitMQ)
-                            +-------------------------+
-                      /                  |                   \
-    [Runner Worker (Rust/Node)]   [AI Worker (Python)]   [Export Worker (Node/Python)]
-                     |                       |                      |
-                [Sandboxed containers]   [ML/DL inference]    [PDF/Image generation]
-
-                                  +-----------------------+
-                                  |  Vector DB (Qdrant)   |
-                                  +-----------------------+
-
-                                  +-----------------------+
-                                  | Blob Storage (S3)     |
-                                  +-----------------------+
+┌─────────────────────────────────────────────────────────────┐
+│                    Synapse Platform                        │
+├─────────────────────────────────────────────────────────────┤
+│  Frontend Layer                                            │
+│  ├── Web App (React + TypeScript)                         │
+│  ├── VS Code Extension                                    │
+│  └── Desktop App (Electron/Tauri)                         │
+├─────────────────────────────────────────────────────────────┤
+│  API Gateway Layer                                         │
+│  ├── Fastify Server                                       │
+│  ├── Authentication & Authorization                        │
+│  ├── Rate Limiting & Security                             │
+│  └── WebSocket Support                                    │
+├─────────────────────────────────────────────────────────────┤
+│  Service Layer                                             │
+│  ├── AI Worker (Python/ML)                                │
+│  ├── Code Runner (Rust/Node.js)                           │
+│  ├── Export Worker                                         │
+│  └── Message Bus (NATS/Redis)                             │
+├─────────────────────────────────────────────────────────────┤
+│  Data Layer                                                │
+│  ├── PostgreSQL Database                                  │
+│  ├── Vector Database (Qdrant/Pinecone)                    │
+│  ├── Blob Storage (S3/MinIO)                              │
+│  └── Cache Layer (Redis)                                  │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-## 🛠️ Technology Stack
+## 🚀 Technology Stack
 
-| Layer            | Technology / Library                     | Purpose                    |
-| ---------------- | ---------------------------------------- | -------------------------- |
-| Frontend         | React + TypeScript + Vite                | Fast dev, strong typing    |
-| API Server       | Node.js + TypeScript + Fastify + TypeORM | Fast, typed, extensible    |
-| Auth             | OAuth2 (GitHub & Google) + JWT + PKCE    | Secure, modern auth flows  |
-| Real-time        | WebSocket / Server-Sent Events           | Streaming AI tokens        |
-| DB               | PostgreSQL (cloud), SQLite (local/dev)   | Relational, JSONB support  |
-| Message Bus      | NATS / Redis Streams / RabbitMQ          | Async decoupling          |
-| Vector DB        | Qdrant / Pinecone / Milvus               | Document embeddings       |
-| Blob Storage     | AWS S3 / MinIO / GCS                     | Store docs, artifacts     |
-| Worker Languages | Python (ML) + Rust/Node (runner, export) | Best tools for each domain |
-| Containerization | Docker + Kubernetes (optional)           | Sandboxing & orchestration |
-| IDE Extensions   | VS Code (TS) + others                    | Wide user base            |
-| Desktop App      | Electron / Tauri + SQLite                | Cross platform local mode  |
+### **Frontend**
+- **React 18** + **TypeScript** for type-safe development
+- **Vite** for lightning-fast builds and development
+- **Tailwind CSS** for modern, responsive design
+- **Framer Motion** for smooth animations
+- **D3.js** + **Three.js** for advanced visualizations
+- **Monaco Editor** for code editing experience
+
+### **Backend**
+- **Node.js** + **TypeScript** for robust server-side code
+- **Fastify** for high-performance API server
+- **TypeORM** for database management
+- **JWT** for secure authentication
+- **WebSocket** for real-time communication
+
+### **AI & ML**
+- **Python** for machine learning workloads
+- **LangChain** for AI orchestration
+- **Vector Databases** for semantic search
+- **Model Context Protocol** for secure AI integration
+
+### **Infrastructure**
+- **Docker Compose** for local development
+- **PostgreSQL** for relational data
+- **Redis** for caching and sessions
+- **NATS** for message queuing
+- **MinIO** for object storage
 
 ## 📁 Project Structure
 
 ```
-sector-universal-learning-platform/
+synapse/
 ├── packages/                    # Shared packages
-│   ├── common/                 # Shared types, utilities, constants
-│   ├── database/               # Database schemas, migrations
-│   ├── auth/                   # Authentication utilities
-│   └── mcp/                    # Model Context Protocol server
-├── apps/                       # Main applications
-│   ├── web/                    # React web frontend
+│   ├── common/                 # Types, utilities, constants
+│   └── database/               # Database entities and config
+├── apps/                       # Applications
 │   ├── api/                    # Fastify API server
-│   ├── desktop/                # Electron/Tauri desktop app
+│   ├── web/                    # React web application
 │   └── vscode-extension/       # VS Code extension
-├── workers/                     # Background workers
-│   ├── ai-worker/              # Python AI/ML worker
-│   ├── runner-worker/          # Rust/Node code execution worker
-│   └── export-worker/          # Export/PDF generation worker
+├── workers/                     # Background services
+│   ├── ai-worker/              # AI/ML processing
+│   ├── runner-worker/          # Code execution
+│   └── export-worker/          # Export processing
 ├── docker/                      # Docker configurations
 ├── docs/                        # Documentation
 └── scripts/                     # Build and deployment scripts
@@ -78,128 +128,116 @@ sector-universal-learning-platform/
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 18+
-- pnpm 8+
-- Docker & Docker Compose
-- PostgreSQL (or use Docker)
+- **Node.js** 18+ and **pnpm** 8+
+- **Docker** and **Docker Compose**
+- **PostgreSQL** 14+ (or use Docker)
 
-### Setup
+### 1. Clone and Setup
 ```bash
-# Clone and install dependencies
 git clone <repository-url>
-cd sector-universal-learning-platform
+cd synapse
 pnpm install
-
-# Start development environment
-pnpm run setup
-
-# Start all services
-pnpm run dev
 ```
 
-### Development Commands
+### 2. Start Infrastructure
 ```bash
-pnpm run dev          # Start all services in development mode
-pnpm run build        # Build all packages
-pnpm run test         # Run tests across all packages
-pnpm run lint         # Lint all packages
-pnpm run docker:up    # Start Docker services
-pnpm run docker:down  # Stop Docker services
+pnpm docker:up
 ```
 
-## 🔑 Key Features
+### 3. Build and Run
+```bash
+# Build all packages
+pnpm build
 
-### 1. **User Authentication**
-- OAuth2 with GitHub & Google
-- JWT + refresh tokens
-- Secure token sharing between web & extensions
+# Start API server
+cd apps/api && pnpm start
 
-### 2. **Project & Workspace Management**
-- CRUD for projects, source files, runs
-- Multi-language support
-- Execution history and traces
+# Start web application
+cd apps/web && pnpm dev
 
-### 3. **AI Assistant & Streaming**
-- Low-latency token streaming
-- Context-aware prompts
-- Project code integration
+# Install VS Code extension
+cd apps/vscode-extension && pnpm compile
+```
 
-### 4. **Contextual Document Analysis (`@context`)**
-- Upload PDFs, books, documents
-- Vector embeddings and retrieval
-- MCP server for context-aware AI responses
-- Provenance tracking
+### 4. Access Applications
+- **API Server**: http://localhost:3001
+- **Web App**: http://localhost:3000
+- **Health Check**: http://localhost:3001/health
 
-### 5. **Interactive Visualizations**
-- Code execution trees
-- Data structure animations
-- Compiler phases & AST walks
-- Neural network architectures
+## 🔧 Development
 
-### 6. **Multi-Platform Support**
-- Web application
-- VS Code extension
-- Desktop application
-- API for integrations
+### Available Scripts
+```bash
+pnpm dev          # Start all services in development mode
+pnpm build        # Build all packages
+pnpm test         # Run tests across all packages
+pnpm lint         # Lint all packages
+pnpm clean        # Clean build artifacts
+```
 
-### 7. **Export & Sharing**
-- PDF, PNG, JPEG export
-- Office formats (DOCX, PPTX)
-- Shareable links with permissions
+### Database Management
+```bash
+pnpm db:migrate   # Run database migrations
+pnpm db:seed      # Seed database with sample data
+pnpm db:generate  # Generate new migration
+```
 
-## 🔌 API Endpoints
+## 📚 API Documentation
 
-| Method | Path                          | Description                      |
-| ------ | ----------------------------- | -------------------------------- |
-| POST   | `/auth/oauth/start`           | Redirect to OAuth provider       |
-| POST   | `/auth/token/refresh`         | Refresh JWT token                |
-| GET    | `/me`                         | Get current user profile         |
-| GET    | `/projects`                   | List user projects               |
-| POST   | `/projects`                   | Create project                   |
-| POST   | `/projects/:id/runs`          | Create run job                   |
-| GET    | `/runs/:id/events`            | WebSocket stream for run events  |
-| POST   | `/prompts`                    | Submit AI prompt                 |
-| GET    | `/prompts/:id/stream`         | AI token streaming endpoint      |
-| POST   | `/context/session`            | Start MCP context session        |
-| POST   | `/context/session/:id/prompt` | Send prompt within context       |
-| POST   | `/documents`                  | Upload document                  |
-| GET    | `/artifacts/:id`              | Download exported artifacts      |
+### Core Endpoints
+- `GET /health` - System health check
+- `POST /auth/login` - User authentication
+- `GET /projects` - List user projects
+- `POST /runs` - Execute code
+- `POST /prompts` - Send AI prompts
+- `POST /context/analyze` - Analyze document context
+- `POST /visualizations` - Create visualizations
+- `POST /exports` - Export data
 
-## 🧪 Development Workflow
+### WebSocket Events
+- `code_execution` - Real-time code execution updates
+- `ai_response` - Streaming AI responses
+- `visualization_update` - Live visualization updates
 
-1. **Phase 1**: Core API + Auth + Project CRUD + Basic streaming
-2. **Phase 2**: AI assistant + Document upload + Export worker
-3. **Phase 3**: Context sessions + MCP server + Multi-language adapters
-4. **Phase 4**: Advanced visualizations + Marketplace + Scaling
+## 🔒 Security Features
 
-## 🔒 Security & Privacy
-
-- JWT + refresh tokens
-- OAuth2 with PKCE
-- Sandboxed code execution
-- Encrypted document storage
-- Rate limiting & quotas
-- Audit logging
+- **OAuth2** with PKCE for secure authentication
+- **JWT** tokens with configurable expiration
+- **Rate limiting** to prevent abuse
+- **CORS** configuration for web security
+- **Input validation** with Zod schemas
+- **SQL injection** protection with TypeORM
+- **XSS protection** with Helmet.js
 
 ## 🤝 Contributing
 
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+
+### Development Setup
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Add tests
+4. Add tests and documentation
 5. Submit a pull request
 
 ## 📄 License
 
-MIT License - see [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🆘 Support
 
-- [Documentation](docs/)
-- [Issues](https://github.com/your-org/sector/issues)
-- [Discussions](https://github.com/your-org/sector/discussions)
+- **Documentation**: [docs.synapse.dev](https://docs.synapse.dev)
+- **Issues**: [GitHub Issues](https://github.com/synapse/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/synapse/discussions)
+- **Email**: support@synapse.dev
+
+## 🌟 Acknowledgments
+
+- Built with ❤️ by the Synapse team
+- Inspired by the need for better programming education
+- Powered by modern AI and visualization technologies
 
 ---
 
-**Built with ❤️ for the learning community**
+**Synapse** - Connecting minds, code, and AI for the future of learning. 🧠✨
 

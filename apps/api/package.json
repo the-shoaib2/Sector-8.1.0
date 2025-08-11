@@ -1,53 +1,32 @@
 {
-  "name": "@sector/api",
+  "name": "@synapse/api",
   "version": "1.0.0",
-  "description": "Fastify API server for Sector Universal Learning Platform",
+  "description": "Fastify API server for Synapse platform",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc",
     "dev": "tsx watch src/index.ts",
+    "build": "tsc",
     "start": "node dist/index.js",
     "clean": "rimraf dist",
-    "test": "jest",
-    "lint": "eslint src --ext .ts",
-    "db:migrate": "tsx src/migrate.ts",
-    "db:seed": "tsx src/seed.ts"
+    "lint": "eslint src --ext .ts"
   },
   "dependencies": {
-    "@sector/common": "workspace:*",
-    "@sector/database": "workspace:*",
-    "@sector/auth": "workspace:*",
-    "fastify": "^4.24.3",
-    "@fastify/cors": "^8.4.0",
+    "@synapse/database": "workspace:*",
+    "fastify": "^4.29.1",
+    "@fastify/cors": "^8.5.0",
     "@fastify/helmet": "^11.1.1",
-    "@fastify/rate-limit": "^9.0.1",
+    "@fastify/rate-limit": "^9.1.0",
     "@fastify/websocket": "^8.3.1",
-    "@fastify/jwt": "^8.0.0",
-    "@fastify/multipart": "^8.0.0",
+    "@fastify/jwt": "^8.0.1",
+    "@fastify/multipart": "^8.3.1",
     "@fastify/static": "^6.12.0",
-    "fastify-plugin": "^4.5.1",
-    "dotenv": "^16.3.1",
-    "bcryptjs": "^2.4.3",
-    "jsonwebtoken": "^9.0.2",
-    "redis": "^4.6.10",
-    "nats": "^2.19.0",
-    "multer": "^1.4.5-lts.1",
-    "sharp": "^0.32.6",
-    "pdf-parse": "^1.1.1",
-    "mammoth": "^1.6.0",
-    "marked": "^9.1.6"
+    "dotenv": "^16.3.1"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
-    "@types/bcryptjs": "^2.4.6",
-    "@types/jsonwebtoken": "^9.0.5",
-    "@types/multer": "^1.4.11",
-    "@types/pdf-parse": "^1.1.4",
-    "@types/marked": "^5.0.2",
     "typescript": "^5.3.0",
     "tsx": "^4.6.2",
-    "rimraf": "^5.0.5",
-    "@types/ws": "^8.5.10"
+    "rimraf": "^5.0.5"
   }
 }
 

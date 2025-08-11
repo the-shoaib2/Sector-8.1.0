@@ -1,9 +1,9 @@
 {
-  "name": "sector-learning-platform",
-  "displayName": "Sector Learning Platform",
+  "name": "synapse-learning-platform",
+  "displayName": "Synapse Learning Platform",
   "description": "Universal Intelligent Learning & Coding Assistant for VS Code",
   "version": "1.0.0",
-  "publisher": "sector",
+  "publisher": "synapse",
   "engines": {
     "vscode": "^1.74.0"
   },
@@ -23,137 +23,137 @@
     "education"
   ],
   "activationEvents": [
-    "onCommand:sector.login",
-    "onCommand:sector.openProject",
-    "onCommand:sector.showAssistant",
-    "onCommand:sector.visualizeCode",
-    "onCommand:sector.analyzeContext",
-    "onWebviewPanel:sector.visualization"
+    "onCommand:synapse.login",
+    "onCommand:synapse.openProject",
+    "onCommand:synapse.showAssistant",
+    "onCommand:synapse.visualizeCode",
+    "onCommand:synapse.analyzeContext",
+    "onWebviewPanel:synapse.visualization"
   ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "sector.login",
-        "title": "Sector: Login",
-        "category": "Sector"
+        "command": "synapse.login",
+        "title": "Synapse: Login",
+        "category": "Synapse"
       },
       {
-        "command": "sector.logout",
-        "title": "Sector: Logout",
-        "category": "Sector"
+        "command": "synapse.logout",
+        "title": "Synapse: Logout",
+        "category": "Synapse"
       },
       {
-        "command": "sector.openProject",
-        "title": "Sector: Open Project",
-        "category": "Sector"
+        "command": "synapse.openProject",
+        "title": "Synapse: Open Project",
+        "category": "Synapse"
       },
       {
-        "command": "sector.showAssistant",
-        "title": "Sector: AI Assistant",
-        "category": "Sector"
+        "command": "synapse.showAssistant",
+        "title": "Synapse: AI Assistant",
+        "category": "Synapse"
       },
       {
-        "command": "sector.visualizeCode",
-        "title": "Sector: Visualize Code",
-        "category": "Sector"
+        "command": "synapse.visualizeCode",
+        "title": "Synapse: Visualize Code",
+        "category": "Synapse"
       },
       {
-        "command": "sector.analyzeContext",
-        "title": "Sector: Analyze Context",
-        "category": "Sector"
+        "command": "synapse.analyzeContext",
+        "title": "Synapse: Analyze Context",
+        "category": "Synapse"
       },
       {
-        "command": "sector.exportVisualization",
-        "title": "Sector: Export Visualization",
-        "category": "Sector"
+        "command": "synapse.exportVisualization",
+        "title": "Synapse: Export Visualization",
+        "category": "Synapse"
       }
     ],
     "menus": {
       "commandPalette": [
         {
-          "command": "sector.login",
-          "when": "!sector.isAuthenticated"
+          "command": "synapse.login",
+          "when": "!synapse.isAuthenticated"
         },
         {
-          "command": "sector.logout",
-          "when": "sector.isAuthenticated"
+          "command": "synapse.logout",
+          "when": "synapse.isAuthenticated"
         },
         {
-          "command": "sector.openProject",
-          "when": "sector.isAuthenticated"
+          "command": "synapse.openProject",
+          "when": "synapse.isAuthenticated"
         },
         {
-          "command": "sector.showAssistant",
-          "when": "sector.isAuthenticated"
+          "command": "synapse.showAssistant",
+          "when": "synapse.isAuthenticated"
         },
         {
-          "command": "sector.visualizeCode",
-          "when": "sector.isAuthenticated"
+          "command": "synapse.visualizeCode",
+          "when": "synapse.isAuthenticated"
         },
         {
-          "command": "sector.analyzeContext",
-          "when": "sector.isAuthenticated"
+          "command": "synapse.analyzeContext",
+          "when": "synapse.isAuthenticated"
         }
       ],
       "editor/context": [
         {
-          "command": "sector.visualizeCode",
-          "when": "sector.isAuthenticated && editorTextFocus",
-          "group": "sector"
+          "command": "synapse.visualizeCode",
+          "when": "synapse.isAuthenticated && editorTextFocus",
+          "group": "synapse"
         },
         {
-          "command": "sector.analyzeContext",
-          "when": "sector.isAuthenticated && editorTextFocus",
-          "group": "sector"
+          "command": "synapse.analyzeContext",
+          "when": "synapse.isAuthenticated && editorTextFocus",
+          "group": "synapse"
         }
       ]
     },
     "configuration": {
-      "title": "Sector Learning Platform",
+      "title": "Synapse Learning Platform",
       "properties": {
-        "sector.apiUrl": {
+        "synapse.apiUrl": {
           "type": "string",
           "default": "http://localhost:3001",
-          "description": "Sector API server URL"
+          "description": "Synapse API server URL"
         },
-        "sector.autoLogin": {
+        "synapse.autoLogin": {
           "type": "boolean",
           "default": true,
           "description": "Automatically login on startup"
         },
-        "sector.showNotifications": {
+        "synapse.showNotifications": {
           "type": "boolean",
           "default": true,
-          "description": "Show notifications from Sector"
+          "description": "Show notifications from Synapse"
         }
       }
     },
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "sector",
-          "title": "Sector Learning",
+          "id": "synapse",
+          "title": "Synapse Learning",
           "icon": "resources/icon.svg"
         }
       ]
     },
     "views": {
-      "sector": [
+      "synapse": [
         {
-          "id": "sector.projects",
+          "id": "synapse.projects",
           "name": "Projects",
-          "when": "sector.isAuthenticated"
+          "when": "synapse.isAuthenticated"
         },
         {
-          "id": "sector.assistant",
+          "id": "synapse.assistant",
           "name": "AI Assistant",
-          "when": "sector.isAuthenticated"
+          "when": "synapse.isAuthenticated"
         },
         {
-          "id": "sector.visualizations",
+          "id": "synapse.visualizations",
           "name": "Visualizations",
-          "when": "sector.isAuthenticated"
+          "when": "synapse.isAuthenticated"
         }
       ]
     }
@@ -166,7 +166,7 @@
     "test": "node ./out/test/runTest.js"
   },
   "dependencies": {
-    "@sector/common": "workspace:*",
+    "@synapse/common": "workspace:*",
     "axios": "^1.6.2",
     "ws": "^8.14.2"
   },

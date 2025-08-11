@@ -1,7 +1,7 @@
 {
-  "name": "@sector/web",
+  "name": "@synapse/web",
   "version": "1.0.0",
-  "description": "React web frontend for Sector Universal Learning Platform",
+  "description": "React web frontend for Synapse Universal Learning Platform",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -15,7 +15,7 @@
     "test:coverage": "vitest --coverage"
   },
   "dependencies": {
-    "@sector/common": "workspace:*",
+    "@synapse/common": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.20.1",

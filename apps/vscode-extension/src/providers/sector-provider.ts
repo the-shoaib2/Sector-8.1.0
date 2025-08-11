@@ -2,9 +2,9 @@ import * as vscode from 'vscode';
 import { SectorClient } from '../clients/sector-client';
 
 export class SectorProvider implements vscode.WebviewViewProvider {
-  public static readonly viewType = 'sector.projects';
+  public static readonly viewType = 'synapse.projects';
 
-  constructor(private readonly sectorClient: SectorClient) {}
+  constructor(private readonly synapseClient: SectorClient) {}
 
   public resolveWebviewView(
     webviewView: vscode.WebviewView,
@@ -14,8 +14,8 @@ export class SectorProvider implements vscode.WebviewViewProvider {
     webviewView.webview.options = {
       enableScripts: true,
       localResourceRoots: [
-        vscode.Uri.joinPath(vscode.extensions.getExtension('sector.sector-learning-platform')?.extensionUri || vscode.Uri.file(__dirname), 'media'),
-        vscode.Uri.joinPath(vscode.extensions.getExtension('sector.sector-learning-platform')?.extensionUri || vscode.Uri.file(__dirname), 'out/compiled'),
+        vscode.Uri.joinPath(vscode.extensions.getExtension('synapse.synapse-learning-platform')?.extensionUri || vscode.Uri.file(__dirname), 'media'),
+        vscode.Uri.joinPath(vscode.extensions.getExtension('synapse.synapse-learning-platform')?.extensionUri || vscode.Uri.file(__dirname), 'out/compiled'),
       ],
     };
 
@@ -42,7 +42,7 @@ export class SectorProvider implements vscode.WebviewViewProvider {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Sector Projects</title>
+        <title>Synapse Projects</title>
         <style>
             body {
                 padding: 10px;

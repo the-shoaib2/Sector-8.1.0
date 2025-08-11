@@ -1,61 +1,22 @@
 {
-  "name": "@sector/ai-worker",
+  "name": "@synapse/ai-worker",
   "version": "1.0.0",
-  "description": "AI/ML worker for Sector Universal Learning Platform",
+  "description": "AI/ML worker service for Synapse platform",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "dev": "tsx watch src/index.ts",
-    "start": "node dist/index.js",
+    "dev": "tsc --watch",
     "clean": "rimraf dist",
-    "test": "jest",
-    "lint": "eslint src --ext .ts"
+    "start": "node dist/index.js"
   },
   "dependencies": {
-    "@sector/common": "workspace:*",
-    "openai": "^4.20.1",
-    "anthropic": "^0.7.8",
-    "cohere": "^4.37",
-    "langchain": "^0.0.200",
-    "langchain-openai": "^0.0.14",
-    "langchain-anthropic": "^0.0.12",
-    "transformers": "^2.35.0",
-    "torch": "^2.1.0",
-    "numpy": "^1.24.0",
-    "pandas": "^2.1.0",
-    "scikit-learn": "^1.3.0",
-    "redis": "^4.6.10",
-    "nats": "^2.19.0",
-    "dotenv": "^16.3.1",
-    "axios": "^1.6.2",
-    "ws": "^8.14.2",
-    "pdf-parse": "^1.1.1",
-    "mammoth": "^1.6.0",
-    "markdown": "^3.5.1",
-    "sentence-transformers": "^2.2.2",
-    "qdrant-client": "^1.6.9",
-    "chromadb": "^0.4.18",
-    "faiss-cpu": "^1.7.4",
-    "tiktoken": "^0.5.2",
-    "pydantic": "^2.5.0",
-    "fastapi": "^0.104.1",
-    "uvicorn": "^0.24.0",
-    "websockets": "^12.0"
+    "@synapse/common": "workspace:*",
+    "python-shell": "^5.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",
-    "@types/ws": "^8.5.10",
-    "@types/pdf-parse": "^1.1.4",
     "typescript": "^5.3.0",
-    "tsx": "^4.6.2",
-    "rimraf": "^5.0.5",
-    "eslint": "^8.55.0",
-    "@typescript-eslint/eslint-plugin": "^6.14.0",
-    "@typescript-eslint/parser": "^6.14.0"
-  },
-  "engines": {
-    "node": ">=18.0.0",
-    "python": ">=3.9.0"
+    "rimraf": "^5.0.5"
   }
 }
 
