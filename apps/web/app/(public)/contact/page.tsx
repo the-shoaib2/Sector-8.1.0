@@ -306,7 +306,7 @@ export default function ContactPage() {
               Get in Touch
             </Badge>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground mb-4 sm:mb-6">
-              {data?.hero?.title || "Get in Touch with B.A.B.Y."}
+              {data?.hero?.title || "Get in Touch with Synapse"}
             </h1>
             <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto mb-6 sm:mb-8 px-4">
               {data?.hero?.subtitle || "Have questions about our AI code assistant? We're here to help you understand code better."}

@@ -10,7 +10,7 @@ import { useState } from "react"
 const plans = [
   {
     name: "Free",
-    description: "Perfect for getting started with B.A.B.Y.",
+            description: "Perfect for getting started with Synapse.",
     price: "$0",
     period: "forever",
     icon: <Code2 className="w-6 h-6" />,
@@ -203,7 +203,7 @@ export default function PricingPage() {
           >
             <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">Frequently Asked Questions</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Everything you need to know about B.A.B.Y. pricing and plans
+              Everything you need to know about Synapse pricing and plans
             </p>
           </motion.div>
           <div className="grid sm:grid-cols-2 gap-6">
@@ -254,7 +254,7 @@ export default function PricingPage() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-lg sm:text-xl mb-6 sm:mb-8 opacity-90"
           >
-            Join thousands of developers who are already using B.A.B.Y. to write better code.
+            Join thousands of developers who are already using Synapse to write better code.
           </motion.p>
           <motion.div 
             initial={{ opacity: 0, y: 20 }}

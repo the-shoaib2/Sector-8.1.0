@@ -29,7 +29,7 @@ export default function CtaSection() {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="text-lg sm:text-xl mb-6 sm:mb-8 opacity-90"
         >
-          Join thousands of developers who are already using B.A.B.Y. to write better code.
+          Join thousands of developers who are already using Synapse to write better code.
         </motion.p>
         <motion.div 
           initial={{ opacity: 0, y: 20 }}

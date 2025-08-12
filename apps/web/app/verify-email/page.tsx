@@ -1,36 +1,94 @@
-import { redirect } from "next/navigation"
-import { verifyEmail } from "@/lib/email-utils"
+"use client"
+
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { Metadata } from 'next'
 
-type Props = {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
-  params: Promise<{ [key: string]: string }>
-}
+export default function VerifyEmailPage() {
+  const [token, setToken] = useState<string>("")
+  const [email, setEmail] = useState<string>("")
+  const [verified, setVerified] = useState<boolean | null>(null)
+  const [error, setError] = useState<string>("")
+  const [loading, setLoading] = useState(true)
 
-export const metadata: Metadata = {
-  title: 'Verify Email',
-  description: 'Verify your email address',
-}
+  useEffect(() => {
+    // Get URL parameters
+    const urlParams = new URLSearchParams(window.location.search)
+    const tokenParam = urlParams.get('token')
+    const emailParam = urlParams.get('email')
 
-export default async function VerifyEmailPage({ searchParams }: Props) {
-  const resolvedParams = await searchParams
-  const token = resolvedParams.token as string
-  const email = resolvedParams.email as string
+    console.log("VerifyEmailPage - URL params:", { token: tokenParam, email: emailParam })
 
-  if (!token || !email) {
-    redirect("/login")
-  }
+    if (!tokenParam || !emailParam) {
+      console.log("VerifyEmailPage - Missing params, redirecting to login")
+      window.location.href = "/login"
+      return
+    }
 
-  let verified = false
-  let error = ""
+    setToken(tokenParam)
+    setEmail(emailParam)
 
-  try {
-    verified = await verifyEmail(email, token)
-  } catch (err) {
-    console.error("Error verifying email:", err)
-    error = "An error occurred while verifying your email."
+    // Verify email
+    const verifyEmail = async () => {
+      try {
+        console.log("VerifyEmailPage - Attempting to verify email")
+        const response = await fetch(`/api/user/verify-email?token=${encodeURIComponent(tokenParam)}&email=${encodeURIComponent(emailParam)}`, {
+          method: 'GET',
+        })
+
+        if (response.ok) {
+          console.log("VerifyEmailPage - Email verified successfully")
+          setVerified(true)
+        } else {
+          console.log("VerifyEmailPage - Email verification failed")
+          setVerified(false)
+          const errorData = await response.json()
+          setError(errorData.message || "Verification failed")
+        }
+      } catch (err) {
+        console.error("VerifyEmailPage - Error:", err)
+        setVerified(false)
+        setError("An error occurred while verifying your email.")
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    verifyEmail()
+  }, [])
+
+  // Prevent any alerts from appearing
+  useEffect(() => {
+    // Override alert function to prevent any alerts
+    const originalAlert = window.alert
+    window.alert = () => {
+      console.log("Alert blocked on verify-email page")
+    }
+
+    // Override confirm function to prevent any confirm dialogs
+    const originalConfirm = window.confirm
+    window.confirm = () => {
+      console.log("Confirm dialog blocked on verify-email page")
+      return false
+    }
+
+    return () => {
+      window.alert = originalAlert
+      window.confirm = originalConfirm
+    }
+  }, [])
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="w-full max-w-md space-y-8">
+          <div className="text-center">
+            <h2 className="mt-6 text-3xl font-bold tracking-tight text-gray-900">Verifying Email...</h2>
+            <p className="mt-2 text-sm text-gray-500">Please wait while we verify your email address.</p>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (

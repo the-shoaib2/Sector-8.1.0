@@ -57,7 +57,7 @@ export function PublicFooter() {
           <div className="space-y-3">
             <div className="flex items-center space-x-2">
               <Code2 className="h-6 w-6 text-primary" />
-              <span className="text-lg font-bold">B.A.B.Y.</span>
+              <span className="text-lg font-bold">Synapse</span>
             </div>
             <p className="text-xs text-muted-foreground leading-relaxed">
               AI-powered code assistant for flow diagrams, summaries, and more. Basic Assistant Bring Your Help.
@@ -94,7 +94,7 @@ export function PublicFooter() {
 
         <div className="border-t border-border/40 mt-6 pt-4 flex flex-col sm:flex-row justify-between items-center gap-3">
           <p className="text-xs text-muted-foreground">
-            © {currentYear} B.A.B.Y. All rights reserved.
+            © {currentYear} Synapse All rights reserved.
           </p>
           <div className="flex items-center space-x-4">
             <button

@@ -14,7 +14,7 @@ export async function GET() {
         {
           title: "Email Support",
           description: "Get help via email within 24 hours",
-          contact: "support@baby.dev",
+          contact: "support@synapse.dev",
           icon: "Mail"
         },
         {
@@ -50,7 +50,7 @@ export async function GET() {
           answer: "Simply create a team and share the invite link with your developers. They can join using the link or by searching for your team name."
         },
         {
-          question: "Can I use B.A.B.Y. for free?",
+          question: "Can I use Synapse for free?",
           answer: "Yes! We offer a free plan that supports basic code analysis features. Upgrade to Pro for advanced features and team collaboration."
         },
         {
@@ -79,7 +79,7 @@ export async function GET() {
         },
         {
           title: "Community Forum",
-          description: "Connect with other B.A.B.Y. users",
+          description: "Connect with other Synapse users",
           icon: "Users",
           cta: "Join Forum"
         },
@@ -92,7 +92,7 @@ export async function GET() {
       ],
       cta: {
         title: "Ready to Get Started?",
-        subtitle: "Join thousands of developers who are already using B.A.B.Y. to simplify their code development experience.",
+        subtitle: "Join thousands of developers who are already using Synapse to simplify their code development experience.",
         ctaPrimary: {
           text: "Start Free Trial",
           href: "/register"

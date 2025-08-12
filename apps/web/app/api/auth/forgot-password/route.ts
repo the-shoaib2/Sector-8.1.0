@@ -56,7 +56,7 @@ export async function POST(request: Request) {
         const resetUrl = getResetUrl(resetToken);
         
         await resend.emails.send({
-          from: 'B.A.B.Y. <noreply@baby.vercel.app>',
+          from: 'Synapse <noreply@synapse.vercel.app>',
           to: email,
           subject: 'Password Reset Request',
           html: `

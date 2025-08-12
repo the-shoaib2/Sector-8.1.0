@@ -11,7 +11,7 @@ import { useState } from "react"
 const categories = [
   {
     name: "Getting Started",
-    description: "Learn the basics and set up B.A.B.Y. for your project",
+            description: "Learn the basics and set up Synapse for your project",
     icon: <Book className="w-6 h-6" />,
     color: "bg-blue-500",
     articles: [
@@ -60,8 +60,8 @@ const categories = [
 
 const popularArticles = [
   {
-    title: "Getting Started with B.A.B.Y.",
-    description: "Learn how to set up and use B.A.B.Y. for your first code analysis",
+            title: "Getting Started with Synapse",
+        description: "Learn how to set up and use Synapse for your first code analysis",
     category: "Getting Started",
     readTime: "5 min read"
   },
@@ -73,13 +73,13 @@ const popularArticles = [
   },
   {
     title: "API Authentication Guide",
-    description: "Complete guide to authenticating with the B.A.B.Y. API",
+            description: "Complete guide to authenticating with the Synapse API",
     category: "API Reference",
     readTime: "6 min read"
   },
   {
     title: "Code Optimization Best Practices",
-    description: "Learn how to optimize your code using B.A.B.Y.'s analysis tools",
+            description: "Learn how to optimize your code using Synapse's analysis tools",
     category: "Tutorials",
     readTime: "10 min read"
   }
@@ -108,10 +108,10 @@ export default function DocsPage() {
               Documentation
             </Badge>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground mb-4 sm:mb-6">
-              B.A.B.Y. Documentation
+              Synapse Documentation
             </h1>
             <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto mb-6 sm:mb-8 px-4">
-              Everything you need to know about using B.A.B.Y. for code analysis, flow diagrams, and AI-powered development.
+              Everything you need to know about using Synapse for code analysis, flow diagrams, and AI-powered development.
             </p>
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
@@ -149,7 +149,7 @@ export default function DocsPage() {
           >
             <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">Popular Articles</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Start with these essential guides to get the most out of B.A.B.Y.
+              Start with these essential guides to get the most out of Synapse
             </p>
           </motion.div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -352,7 +352,7 @@ export default function DocsPage() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-lg sm:text-xl mb-6 sm:mb-8 opacity-90"
           >
-            Our support team is here to help you get the most out of B.A.B.Y.
+            Our support team is here to help you get the most out of Synapse
           </motion.p>
           <motion.div 
             initial={{ opacity: 0, y: 20 }}

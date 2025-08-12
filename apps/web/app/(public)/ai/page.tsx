@@ -1,5 +1,5 @@
-import AIPrompt from "@/components/ai-prompt"
+import SynapseAnalyzer from "@/components/synapse-analyzer"
 
-export default function BabyAIPage() {
-  return <AIPrompt />
+export default function SynapseAIPage() {
+  return <SynapseAnalyzer />
 } 

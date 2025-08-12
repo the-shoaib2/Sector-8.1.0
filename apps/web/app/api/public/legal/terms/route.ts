@@ -10,7 +10,7 @@ export async function GET() {
         title: "Introduction",
         icon: "Shield",
         content: [
-          "Welcome to B.A.B.Y. (\"we,\" \"our,\" or \"us\"). These Terms of Service (\"Terms\") govern your use of our AI-powered code analysis and development platform, including our website, mobile applications, and related services (collectively, the \"Service\").",
+          "Welcome to Synapse (\"we,\" \"our,\" or \"us\"). These Terms of Service (\"Terms\") govern your use of our AI-powered code analysis and development platform, including our website, mobile applications, and related services (collectively, the \"Service\").",
           "By accessing or using the Service, you agree to be bound by these Terms. If you disagree with any part of these terms, then you may not access the Service."
         ]
       },
@@ -18,7 +18,7 @@ export async function GET() {
         id: 2,
         title: "Service Description",
         content: [
-          "B.A.B.Y. provides a platform for developers and development teams to:",
+          "Synapse provides a platform for developers and development teams to:",
           [
             "Analyze and understand code structure",
             "Generate flow diagrams and visualizations",
@@ -71,7 +71,7 @@ export async function GET() {
         id: 6,
         title: "Intellectual Property",
         content: [
-          "The Service and its original content, features, and functionality are owned by B.A.B.Y. and are protected by international copyright, trademark, patent, trade secret, and other intellectual property laws.",
+          "The Service and its original content, features, and functionality are owned by Synapse and are protected by international copyright, trademark, patent, trade secret, and other intellectual property laws.",
           "You retain ownership of any content you submit to the Service, but you grant us a worldwide, non-exclusive, royalty-free license to use, reproduce, modify, and distribute your content in connection with the Service."
         ]
       },
@@ -88,7 +88,7 @@ export async function GET() {
         id: 8,
         title: "Limitation of Liability",
         content: [
-          "To the maximum extent permitted by law, B.A.B.Y. shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses.",
+          "To the maximum extent permitted by law, Synapse shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses.",
           "Our total liability to you for any claims arising from these Terms or your use of the Service shall not exceed the amount you paid us in the 12 months preceding the claim."
         ]
       },
@@ -107,7 +107,7 @@ export async function GET() {
         content: [
           "If you have any questions about these Terms of Service, please contact us:",
           {
-            email: "legal@baby.dev",
+            email: "legal@synapse.dev",
             address: "123 Innovation Drive, San Francisco, CA 94105",
             phone: "+1 (555) 123-4567"
           },

@@ -269,7 +269,7 @@ export const appConfig: AppConfig = {
     longDescription: "Simplify your meal management with our comprehensive solution for roommates and shared living spaces. Track meals, calculate costs, and manage payments with ease.",
     version: "0.1.0",
     author: "MealSphere Team",
-    website: "https://baby.vercel.app",
+    website: "https://synapse.vercel.app",
     email: "contact@mealsphere.com",
     phone: "+1 (555) 123-4567"
   },

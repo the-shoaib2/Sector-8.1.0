@@ -8,9 +8,9 @@ import { motion } from "framer-motion"
 
 const blogPosts = [
   {
-    title: "Introducing B.A.B.Y.: The Future of Code Analysis",
+            title: "Introducing Synapse: The Future of Code Analysis",
     description: "Discover how our new AI-powered code assistant is revolutionizing the way developers write and understand code.",
-    author: "B.A.B.Y. Team",
+    author: "Synapse Team",
     date: "2024-01-15",
     category: "Product",
     readTime: "5 min read",
@@ -26,15 +26,15 @@ const blogPosts = [
   },
   {
     title: "AI-Powered Code Optimization: A Deep Dive",
-    description: "Explore the algorithms behind B.A.B.Y.'s intelligent code optimization suggestions.",
+            description: "Explore the algorithms behind Synapse's intelligent code optimization suggestions.",
     author: "Dr. Michael Rodriguez",
     date: "2024-01-10",
     category: "Technical",
     readTime: "12 min read"
   },
   {
-    title: "Building Better Code Reviews with B.A.B.Y.",
-    description: "Tips and tricks for using B.A.B.Y. to improve your code review process.",
+            title: "Building Better Code Reviews with Synapse",
+        description: "Tips and tricks for using Synapse to improve your code review process.",
     author: "Alex Thompson",
     date: "2024-01-08",
     category: "Best Practices",
@@ -43,14 +43,14 @@ const blogPosts = [
   {
     title: "The Evolution of AI in Software Development",
     description: "A comprehensive look at how AI is transforming the software development landscape.",
-    author: "B.A.B.Y. Team",
+    author: "Synapse Team",
     date: "2024-01-05",
     category: "Industry",
     readTime: "10 min read"
   },
   {
-    title: "Getting Started with B.A.B.Y. CLI",
-    description: "A step-by-step guide to using B.A.B.Y. from the command line.",
+            title: "Getting Started with Synapse CLI",
+        description: "A step-by-step guide to using Synapse from the command line.",
     author: "David Kim",
     date: "2024-01-03",
     category: "Tutorial",
@@ -81,7 +81,7 @@ export default function BlogPage() {
               Blog & Updates
             </Badge>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground mb-4 sm:mb-6">
-              B.A.B.Y. Blog
+              Synapse Blog
             </h1>
             <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto mb-6 sm:mb-8 px-4">
               Stay updated with the latest features, tutorials, and insights about AI-powered code analysis and development.
@@ -201,7 +201,7 @@ export default function BlogPage() {
           >
             <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">Latest Articles</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Explore our latest insights, tutorials, and updates about B.A.B.Y. and AI-powered development
+              Explore our latest insights, tutorials, and updates about Synapse and AI-powered development
             </p>
           </motion.div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
@@ -263,7 +263,7 @@ export default function BlogPage() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-2xl sm:text-3xl font-bold mb-4"
           >
-            Stay Updated with B.A.B.Y.
+            Stay Updated with Synapse
           </motion.h2>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}

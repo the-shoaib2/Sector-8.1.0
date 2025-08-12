@@ -8,7 +8,7 @@ export async function GET() {
     const aboutData = {
       hero: {
         title: "Building Better Code",
-        subtitle: "B.A.B.Y. was born from a simple observation: code analysis can be challenging, but it doesn't have to be. We're on a mission to make developers' lives easier, one line of code at a time.",
+        subtitle: "Synapse was born from a simple observation: code analysis can be challenging, but it doesn't have to be. We're on a mission to make developers' lives easier, one line of code at a time.",
         ctaPrimary: {
           text: "Join Our Mission",
           href: "/register"
@@ -28,7 +28,7 @@ export async function GET() {
         title: "Our Story",
         content: [
           "In 2023, our founders were struggling with the same problem millions of developers face: understanding complex code, debugging issues, and optimizing performance. What started as a simple code analyzer quickly evolved into something bigger.",
-          "We realized that code analysis doesn't have to be complicated. With the right tools, developers can not only write better code but understand it better too. That's why we built B.A.B.Y. - to transform the way people develop software.",
+          "We realized that code analysis doesn't have to be complicated. With the right tools, developers can not only write better code but understand it better too. That's why we built Synapse - to transform the way people develop software.",
           "Today, we're proud to serve thousands of developers across the globe, helping them build better software through AI-powered code analysis."
         ]
       },

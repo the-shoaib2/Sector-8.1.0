@@ -2,8 +2,35 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from "next-auth/next"
 import { getAuthOptions } from "@/lib/auth/auth"
 import { prisma } from "@/lib/prisma"
-import { createVerificationToken, sendVerificationEmail } from "@/lib/email-utils"
+import { createVerificationToken, sendVerificationEmail, verifyEmail } from "@/lib/email-utils"
 
+// GET request to verify email with token
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url)
+    const token = searchParams.get('token')
+    const email = searchParams.get('email')
+
+    if (!token || !email) {
+      return NextResponse.json({ message: "Missing token or email" }, { status: 400 })
+    }
+
+    console.log("API - Verifying email:", { email, token: token.substring(0, 8) + "..." })
+
+    const verified = await verifyEmail(email, token)
+
+    if (verified) {
+      return NextResponse.json({ message: "Email verified successfully" })
+    } else {
+      return NextResponse.json({ message: "Invalid or expired verification token" }, { status: 400 })
+    }
+  } catch (error) {
+    console.error("Error verifying email:", error)
+    return NextResponse.json({ message: "Failed to verify email" }, { status: 500 })
+  }
+}
+
+// POST request to send verification email
 export async function POST(request: Request) {
   try {
     const session = await getServerSession(getAuthOptions())

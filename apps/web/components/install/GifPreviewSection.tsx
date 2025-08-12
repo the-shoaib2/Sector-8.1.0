@@ -14,7 +14,7 @@ export default function GifPreviewSection() {
           {!imgError ? (
             <Image
               src="/placeholder.jpg"
-              alt="B.A.B.Y. Preview GIF"
+              alt="Synapse Preview GIF"
               fill
               className="object-cover"
               priority

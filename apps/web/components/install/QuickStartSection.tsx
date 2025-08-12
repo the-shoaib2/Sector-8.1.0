@@ -10,7 +10,7 @@ const quickStart = [
   },
   {
     step: 2,
-    title: "Install B.A.B.Y.",
+            title: "Install Synapse",
     description: "Follow the platform-specific installation instructions"
   },
   {
@@ -21,7 +21,7 @@ const quickStart = [
   {
     step: 4,
     title: "Start Coding",
-    description: "Begin using B.A.B.Y. to analyze and improve your code"
+            description: "Begin using Synapse to analyze and improve your code"
   }
 ]
 
@@ -42,7 +42,7 @@ export default function QuickStartSection() {
         >
           <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">Quick Installation</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Get B.A.B.Y. running in your IDE in just a few simple steps
+            Get Synapse running in your IDE in just a few simple steps
           </p>
         </motion.div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">

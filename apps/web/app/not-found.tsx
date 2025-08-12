@@ -12,7 +12,7 @@ export default function NotFound() {
   
   const quickLinks = [
     { name: "Home", href: "/", icon: Home },
-    { name: "B.A.B.Y. AI", href: "/", icon: Calendar },
+            { name: "Synapse AI", href: "/", icon: Calendar },
   ]
 
   return (

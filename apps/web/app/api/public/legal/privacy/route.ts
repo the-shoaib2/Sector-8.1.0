@@ -10,7 +10,7 @@ export async function GET() {
         title: "Introduction",
         icon: "Shield",
         content: [
-          "B.A.B.Y. (\"we,\" \"our,\" or \"us\") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our AI-powered code analysis and development platform.",
+          "Synapse (\"we,\" \"our,\" or \"us\") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our AI-powered code analysis and development platform.",
           "By using our service, you consent to the data practices described in this policy."
         ]
       },
@@ -116,7 +116,7 @@ export async function GET() {
         content: [
           "If you have any questions about this Privacy Policy or our data practices, please contact us:",
           {
-            email: "privacy@baby.dev",
+            email: "privacy@synapse.dev",
             address: "123 Innovation Drive, San Francisco, CA 94105",
             phone: "+1 (555) 123-4567"
           },

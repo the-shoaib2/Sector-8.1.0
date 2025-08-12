@@ -13,12 +13,12 @@ const platforms = [
     description: "Microsoft's popular code editor",
     icon: <Code2 className="w-6 h-6" />,
     category: "Editor",
-    command: "ext install baby.code-assistant",
+    command: "ext install synapse.code-assistant",
     featured: true,
     steps: [
       "Open VS Code",
       "Go to Extensions (Ctrl+Shift+X)",
-      "Search for 'B.A.B.Y. Code Assistant'",
+      "Search for 'Synapse Code Assistant'",
       "Click Install"
     ]
   },
@@ -27,11 +27,11 @@ const platforms = [
     description: "AI-first code editor built on VS Code",
     icon: <Zap className="w-6 h-6" />,
     category: "Editor",
-    command: "ext install baby.code-assistant",
+    command: "ext install synapse.code-assistant",
     steps: [
       "Open Cursor",
       "Go to Extensions (Ctrl+Shift+X)",
-      "Search for 'B.A.B.Y. Code Assistant'",
+      "Search for 'Synapse Code Assistant'",
       "Click Install"
     ]
   },
@@ -40,11 +40,11 @@ const platforms = [
     description: "Early access version of VS Code",
     icon: <Sparkles className="w-6 h-6" />,
     category: "Editor",
-    command: "ext install baby.code-assistant",
+    command: "ext install synapse.code-assistant",
     steps: [
       "Open VS Code Insiders",
       "Go to Extensions (Ctrl+Shift+X)",
-      "Search for 'B.A.B.Y. Code Assistant'",
+      "Search for 'Synapse Code Assistant'",
       "Click Install"
     ]
   },
@@ -53,11 +53,11 @@ const platforms = [
     description: "Modern code editor for web development",
     icon: <Globe className="w-6 h-6" />,
     category: "Editor",
-    command: "ext install baby.code-assistant",
+    command: "ext install synapse.code-assistant",
     steps: [
       "Open Windsurf",
       "Go to Extensions (Ctrl+Shift+X)",
-      "Search for 'B.A.B.Y. Code Assistant'",
+      "Search for 'Synapse Code Assistant'",
       "Click Install"
     ]
   },
@@ -66,11 +66,11 @@ const platforms = [
     description: "AI-powered code editor",
     icon: <Palette className="w-6 h-6" />,
     category: "Editor",
-    command: "ext install baby.code-assistant",
+    command: "ext install synapse.code-assistant",
     steps: [
       "Open Trae AI",
       "Go to Extensions (Ctrl+Shift+X)",
-      "Search for 'B.A.B.Y. Code Assistant'",
+      "Search for 'Synapse Code Assistant'",
       "Click Install"
     ]
   }
@@ -105,7 +105,7 @@ export default function InstallOptionsSection() {
         >
           <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">Popular Code Editors</h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Install B.A.B.Y. in your favorite code editor for seamless integration
+            Install Synapse in your favorite code editor for seamless integration
           </p>
         </motion.div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">

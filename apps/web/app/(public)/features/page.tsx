@@ -82,7 +82,7 @@ export default function FeaturesPage() {
               Powerful Features for Better Code
             </h1>
             <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto mb-6 sm:mb-8 px-4">
-              Discover how B.A.B.Y. can transform your coding experience with AI-powered analysis, visualization, and optimization tools.
+              Discover how Synapse can transform your coding experience with AI-powered analysis, visualization, and optimization tools.
             </p>
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
@@ -92,7 +92,7 @@ export default function FeaturesPage() {
             >
               <Button size="lg" className="w-full sm:w-auto group">
                 <Code2 className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
-                Try B.A.B.Y. Free
+                Try Synapse Free
               </Button>
               <Button variant="outline" size="lg" className="w-full sm:w-auto group">
                 <ArrowRight className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
@@ -199,7 +199,7 @@ export default function FeaturesPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">Why Choose B.A.B.Y.?</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">Why Choose Synapse?</h2>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <Users className="w-6 h-6 text-primary mt-1" />
@@ -264,7 +264,7 @@ export default function FeaturesPage() {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="text-lg sm:text-xl mb-6 sm:mb-8 opacity-90"
           >
-            Join thousands of developers who are already writing better code with B.A.B.Y.
+            Join thousands of developers who are already writing better code with Synapse
           </motion.p>
           <motion.div 
             initial={{ opacity: 0, y: 20 }}

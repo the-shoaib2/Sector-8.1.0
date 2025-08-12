@@ -109,7 +109,7 @@ export default function AboutPage() {
               {data?.hero?.title || "Building Better Code Understanding"}
             </h1>
             <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto mb-6 sm:mb-8 px-4">
-              {data?.hero?.subtitle || "B.A.B.Y. was born from a simple observation: understanding code can be challenging, but it doesn't have to be."}
+              {data?.hero?.subtitle || "Synapse was born from a simple observation: understanding code can be challenging, but it doesn't have to be."}
             </p>
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
@@ -119,7 +119,7 @@ export default function AboutPage() {
             >
               <Button size="lg" className="w-full sm:w-auto group">
                 <Code2 className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
-                {data?.hero?.ctaPrimary?.text || "Try B.A.B.Y."}
+                {data?.hero?.ctaPrimary?.text || "Try Synapse"}
               </Button>
               <Button variant="outline" size="lg" className="w-full sm:w-auto group">
                 <Globe className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
@@ -324,7 +324,7 @@ export default function AboutPage() {
           >
             <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">Meet Our Team</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              The passionate people behind B.A.B.Y.
+              The passionate people behind Synapse
             </p>
           </motion.div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
