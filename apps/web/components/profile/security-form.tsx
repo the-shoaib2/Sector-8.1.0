@@ -13,13 +13,17 @@ import { Input } from "@/components/ui/input"
 import { toast } from "react-hot-toast"
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { AlertCircle, CheckCircle2, RefreshCw } from "lucide-react"
+import { AlertCircle, CheckCircle2, RefreshCw, Shield, Smartphone, QrCode, Key } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useIsMobile } from "@/hooks/use-mobile"
+import { Switch } from "@/components/ui/switch"
+import { Label } from "@/components/ui/label"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { 
   capitalizeDeviceType, 
   formatLocation, 
@@ -129,6 +133,12 @@ export function SecurityForm({ user }: SecurityFormProps) {
   const [isVerifying, setIsVerifying] = useState(false)
   const [sessions, setSessions] = useState<Session[]>([])
   const [selectedSessions, setSelectedSessions] = useState<string[]>([])
+  const [is2FAEnabled, setIs2FAEnabled] = useState(false)
+  const [is2FALoading, setIs2FALoading] = useState(false)
+  const [show2FASetup, setShow2FASetup] = useState(false)
+  const [qrCodeUrl, setQrCodeUrl] = useState('')
+  const [backupCodes, setBackupCodes] = useState<string[]>([])
+  const [verificationCode, setVerificationCode] = useState('')
   const isFetchingRef = useRef(false)
 
   const fetchSessions = useCallback(async () => {
@@ -355,6 +365,100 @@ export function SecurityForm({ user }: SecurityFormProps) {
     }
   }
 
+  // 2FA Functions
+  async function setup2FA() {
+    try {
+      setIs2FALoading(true)
+      const response = await fetch("/api/auth/2fa/setup", {
+        method: "POST",
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to setup 2FA")
+      }
+
+      const data = await response.json()
+      setQrCodeUrl(data.qrCodeUrl)
+      setBackupCodes(data.backupCodes)
+      setShow2FASetup(true)
+    } catch (error) {
+      console.error(error)
+      toast.error("Failed to setup 2FA")
+    } finally {
+      setIs2FALoading(false)
+    }
+  }
+
+  async function verify2FA() {
+    try {
+      setIs2FALoading(true)
+      const response = await fetch("/api/auth/2fa/verify", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ code: verificationCode }),
+      })
+
+      if (!response.ok) {
+        throw new Error("Invalid verification code")
+      }
+
+      toast.success("2FA enabled successfully!")
+      setIs2FAEnabled(true)
+      setShow2FASetup(false)
+      setVerificationCode('')
+    } catch (error) {
+      console.error(error)
+      toast.error("Failed to verify 2FA code")
+    } finally {
+      setIs2FALoading(false)
+    }
+  }
+
+  async function disable2FA() {
+    try {
+      setIs2FALoading(true)
+      const response = await fetch("/api/auth/2fa/disable", {
+        method: "POST",
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to disable 2FA")
+      }
+
+      toast.success("2FA disabled successfully!")
+      setIs2FAEnabled(false)
+    } catch (error) {
+      console.error(error)
+      toast.error("Failed to disable 2FA")
+    } finally {
+      setIs2FALoading(false)
+    }
+  }
+
+  async function generateBackupCodes() {
+    try {
+      setIs2FALoading(true)
+      const response = await fetch("/api/auth/2fa/backup-codes", {
+        method: "POST",
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to generate backup codes")
+      }
+
+      const data = await response.json()
+      setBackupCodes(data.backupCodes)
+      toast.success("New backup codes generated!")
+    } catch (error) {
+      console.error(error)
+      toast.error("Failed to generate backup codes")
+    } finally {
+      setIs2FALoading(false)
+    }
+  }
+
   return (
     <div className="space-y-6">
       <Card>
@@ -417,6 +521,36 @@ export function SecurityForm({ user }: SecurityFormProps) {
               </div>
             </div>
 
+            {/* Device Information Summary */}
+            {sessions.length > 0 && (
+              <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg">
+                <div className="space-y-3">
+                  <h4 className="text-sm font-medium text-blue-900">Device Information Summary</h4>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Badge variant="secondary" className="bg-blue-100 text-blue-800 hover:bg-blue-200">
+                      <span className="font-medium mr-1">{sessions.filter(s => s.deviceType === 'Desktop').length}</span>
+                      Desktop
+                    </Badge>
+                    <Badge variant="secondary" className="bg-green-100 text-green-800 hover:bg-green-200">
+                      <span className="font-medium mr-1">{sessions.filter(s => s.deviceType === 'Mobile').length}</span>
+                      Mobile
+                    </Badge>
+                    <Badge variant="secondary" className="bg-purple-100 text-purple-800 hover:bg-purple-200">
+                      <span className="font-medium mr-1">{sessions.filter(s => s.deviceType === 'Tablet').length}</span>
+                      Tablet
+                    </Badge>
+                    <Badge variant="secondary" className="bg-gray-100 text-gray-800 hover:bg-gray-200">
+                      <span className="font-medium mr-1">{sessions.filter(s => s.deviceType === 'Unknown' || !s.deviceType).length}</span>
+                      Unknown
+                    </Badge>
+                  </div>
+                  <div className="text-xs text-blue-700">
+                    <span className="font-medium">Note:</span> Device information is automatically updated when you access this page.
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div className="flex flex-wrap items-center gap-2">
                 <Button
@@ -441,6 +575,16 @@ export function SecurityForm({ user }: SecurityFormProps) {
                   disabled={isLoading}
                 >
                   <RefreshCw className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={updateCurrentSession}
+                  size="sm"
+                  disabled={isLoading}
+                  title="Update current session with device information"
+                >
+                  <Shield className="h-4 w-4" />
+                  Update Device Info
                 </Button>
               </div>
               <Badge variant="secondary" className="w-fit self-start sm:self-center">
@@ -494,7 +638,7 @@ export function SecurityForm({ user }: SecurityFormProps) {
                             <span className={`text-sm font-medium truncate max-w-[120px] ${
                               session.isCurrent ? 'text-blue-900' : ''
                             }`}>
-                              {session.deviceModel || capitalizeDeviceType(session.deviceType) || 'Unknown Device'}
+                              {session.deviceModel || (session.deviceType ? capitalizeDeviceType(session.deviceType) : 'Unknown Device')}
                             </span>
                             {session.isCurrent && (
                               <Badge variant="default" className="bg-blue-600 text-white text-xs font-medium px-2 py-1">
@@ -519,7 +663,7 @@ export function SecurityForm({ user }: SecurityFormProps) {
                         </div>
                         <div className="space-y-1">
                           <span className="font-medium text-foreground">Device Type:</span>
-                          <div className="truncate">{capitalizeDeviceType(session.deviceType)}</div>
+                          <div className="truncate">{session.deviceType ? capitalizeDeviceType(session.deviceType) : 'Unknown'}</div>
                         </div>
                         <div className="space-y-1">
                           <span className="font-medium text-foreground">Last Active:</span>
@@ -538,7 +682,7 @@ export function SecurityForm({ user }: SecurityFormProps) {
                           <div className="space-y-1 sm:col-span-2">
                             <span className="font-medium text-foreground">Browser:</span>
                             <div className="truncate">
-                              {getBrowserInfo(session.userAgent)}
+                              {getBrowserInfo(session.userAgent).name || 'Unknown'}
                             </div>
                             <details className="mt-1">
                               <summary className="cursor-pointer text-xs text-muted-foreground hover:text-foreground">
@@ -550,6 +694,29 @@ export function SecurityForm({ user }: SecurityFormProps) {
                             </details>
                           </div>
                         )}
+                        {/* Additional Device Information */}
+                        <div className="space-y-1 sm:col-span-2">
+                          <span className="font-medium text-foreground">Device Details:</span>
+                          <div className="text-xs space-y-1">
+                            <div className="flex justify-between">
+                              <span className="text-muted-foreground">OS:</span>
+                              <span>{session.userAgent?.includes('Windows') ? 'Windows' : 
+                                     session.userAgent?.includes('Mac') ? 'macOS' : 
+                                     session.userAgent?.includes('Linux') ? 'Linux' : 
+                                     session.userAgent?.includes('Android') ? 'Android' : 
+                                     session.userAgent?.includes('iOS') ? 'iOS' : 'Unknown'}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-muted-foreground">Screen:</span>
+                              <span>{session.userAgent?.includes('Mobile') ? 'Mobile' : 
+                                     session.userAgent?.includes('Tablet') ? 'Tablet' : 'Desktop'}</span>
+                            </div>
+                            <div className="flex justify-between">
+                              <span className="text-muted-foreground">Connection:</span>
+                              <span>Secure</span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                       
                       {session.isCurrent && (
@@ -565,6 +732,17 @@ export function SecurityForm({ user }: SecurityFormProps) {
                 )}
               </div>
             )}
+
+            {/* Device Information Note */}
+            <div className="bg-amber-50 border border-amber-200 p-3 rounded-lg">
+              <div className="flex items-start gap-2 text-xs text-amber-800">
+                <AlertCircle className="h-4 w-4 mt-0.5 flex-shrink-0" />
+                <div>
+                  <span className="font-medium">Device Information:</span> 
+                  <span className="ml-1">Device details are automatically captured when you access this page. If you see "Unknown" values, click "Update Device Info" to refresh the information.</span>
+                </div>
+              </div>
+            </div>
 
             {/* Tablet/Desktop Table View */}
             {!isMobile && (
@@ -591,7 +769,7 @@ export function SecurityForm({ user }: SecurityFormProps) {
                           <TableHead>Last Active</TableHead>
                           <TableHead>IP Address</TableHead>
                           <TableHead>Device Type</TableHead>
-                          <TableHead>User Agent</TableHead>
+                          <TableHead>OS & Browser</TableHead>
                           <TableHead>Status</TableHead>
                         </TableRow>
                       </TableHeader>
@@ -617,9 +795,9 @@ export function SecurityForm({ user }: SecurityFormProps) {
                                 />
                               </TableCell>
                               <TableCell>
-                                <div className="max-w-[120px] truncate" title={session.deviceModel || capitalizeDeviceType(session.deviceType) || 'N/A'}>
+                                <div className="max-w-[120px] truncate" title={session.deviceModel || (session.deviceType ? capitalizeDeviceType(session.deviceType) : 'N/A')}>
                                   <span className={session.isCurrent ? 'font-medium text-blue-900' : ''}>
-                                    {session.deviceModel || capitalizeDeviceType(session.deviceType) || 'N/A'}
+                                    {session.deviceModel || (session.deviceType ? capitalizeDeviceType(session.deviceType) : 'N/A')}
                                   </span>
                                 </div>
                               </TableCell>
@@ -640,14 +818,27 @@ export function SecurityForm({ user }: SecurityFormProps) {
                                 </div>
                               </TableCell>
                               <TableCell>
-                                <div className="max-w-[100px] truncate" title={capitalizeDeviceType(session.deviceType)}>
-                                  {capitalizeDeviceType(session.deviceType)}
+                                <div className="max-w-[100px] truncate" title={session.deviceType ? capitalizeDeviceType(session.deviceType) : 'Unknown'}>
+                                  {session.deviceType ? capitalizeDeviceType(session.deviceType) : 'Unknown'}
                                 </div>
                               </TableCell>
 
                               <TableCell>
                                 <div className="max-w-[200px] truncate" title={session.userAgent || 'N/A'}>
-                                  {session.userAgent ? getBrowserInfo(session.userAgent) : 'N/A'}
+                                  <div className="space-y-1">
+                                    <div className="text-xs">
+                                      <span className="text-muted-foreground">OS: </span>
+                                      {session.userAgent?.includes('Windows') ? 'Windows' : 
+                                       session.userAgent?.includes('Mac') ? 'macOS' : 
+                                       session.userAgent?.includes('Linux') ? 'Linux' : 
+                                       session.userAgent?.includes('Android') ? 'Android' : 
+                                       session.userAgent?.includes('iOS') ? 'iOS' : 'Unknown'}
+                                    </div>
+                                    <div className="text-xs">
+                                      <span className="text-muted-foreground">Browser: </span>
+                                      {session.userAgent ? getBrowserInfo(session.userAgent).name : 'Unknown'}
+                                    </div>
+                                  </div>
                                 </div>
                               </TableCell>
                               <TableCell>

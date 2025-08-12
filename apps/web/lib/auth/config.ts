@@ -17,7 +17,7 @@ export function validateEnvironmentVariables() {
 
 // Session configuration
 export const sessionConfig = {
-  strategy: "jwt" as SessionStrategy,
+  strategy: "database" as SessionStrategy,
   maxAge: 30 * 24 * 60 * 60, // 30 days
   updateAge: 24 * 60 * 60, // 24 hours
 };
@@ -28,7 +28,7 @@ export const cookieConfig = {
     name: `next-auth.session-token`,
     options: {
       httpOnly: true,
-      sameSite: "lax",
+      sameSite: "lax" as const,
       path: "/",
       secure: process.env.NODE_ENV === "production",
       maxAge: 30 * 24 * 60 * 60, // 30 days
@@ -37,7 +37,7 @@ export const cookieConfig = {
   callbackUrl: {
     name: `next-auth.callback-url`,
     options: {
-      sameSite: "lax",
+      sameSite: "lax" as const,
       path: "/",
       secure: process.env.NODE_ENV === "production",
     },
@@ -46,7 +46,7 @@ export const cookieConfig = {
     name: `next-auth.csrf-token`,
     options: {
       httpOnly: true,
-      sameSite: "lax",
+      sameSite: "lax" as const,
       path: "/",
       secure: process.env.NODE_ENV === "production",
     },

@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getAuthOptions } from '@/lib/auth/auth'
+import { getCurrentSessionInfo } from '@/lib/auth/session-manager'
 import { getServerSession } from 'next-auth/next'
-import { authOptions, getCurrentSessionInfo } from '@/lib/auth/auth'
 import { prisma } from '@/lib/prisma'
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession(getAuthOptions())
     
     if (!session?.user?.id) {
       return new NextResponse(JSON.stringify({ error: 'No active session' }), {

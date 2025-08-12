@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from "next-auth/next"
-import { authOptions } from "@/lib/auth/auth"
+import { getAuthOptions } from "@/lib/auth/auth"
 import { prisma } from "@/lib/prisma"
 import { createVerificationToken, sendVerificationEmail } from "@/lib/email-utils"
 
 export async function POST(request: Request) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession(getAuthOptions())
 
     if (!session?.user?.email) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 })

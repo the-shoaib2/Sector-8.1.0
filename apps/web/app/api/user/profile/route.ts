@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getAuthOptions } from "@/lib/auth/auth"
 import { getServerSession } from "next-auth/next"
-import { authOptions } from "@/lib/auth/auth"
 import { prisma } from "@/lib/prisma"
 import { z } from "zod"
 
@@ -10,9 +10,36 @@ const profileSchema = z.object({
   image: z.string().optional(),
 })
 
+export async function GET(request: NextRequest) {
+  const session = await getServerSession(getAuthOptions())
+
+  if (!session?.user?.email) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 })
+  }
+
+  const currentUser = await prisma.user.findUnique({
+    where: { email: session.user.email },
+  })
+
+  if (!currentUser) {
+    return NextResponse.json({ message: "User not found" }, { status: 404 })
+  }
+
+  return NextResponse.json({
+    message: "Profile fetched successfully",
+    user: {
+      id: currentUser.id,
+      name: currentUser.name,
+      email: currentUser.email,
+      image: currentUser.image,
+      emailVerified: currentUser.emailVerified,
+    },
+  })
+}
+
 export async function PATCH(request: Request) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession(getAuthOptions())
 
     if (!session?.user?.email) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 })

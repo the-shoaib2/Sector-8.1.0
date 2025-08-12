@@ -1,11 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth/next'
-import { authOptions, getCurrentSessionInfo, getCurrentSessionToken } from '@/lib/auth/auth'
+import { getAuthOptions } from '@/lib/auth/auth'
+import { getCurrentSessionInfo } from '@/lib/auth/session-manager'
 import { prisma } from '@/lib/prisma'
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession(getAuthOptions())
     
     if (!session?.user?.id) {
       return new NextResponse(JSON.stringify({ error: 'Unauthorized' }), {
@@ -14,7 +15,9 @@ export async function GET(request: NextRequest) {
     }
 
     // Get session token from cookies
-    const cookieToken = getCurrentSessionToken(request)
+    const cookieToken = request.cookies.get('next-auth.session-token')?.value || 
+                       request.cookies.get('__Secure-next-auth.session-token')?.value || 
+                       'No token found'
     
     // Get current session from database
     const dbSession = await getCurrentSessionInfo(session.user.id)

@@ -1,18 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getServerSession } from 'next-auth/next'
-import { authOptions } from '@/lib/auth/auth'
-import { 
-  updateSessionInfo, 
-  getCurrentSessionInfo, 
-  getAllActiveSessions,
-  revokeMultipleSessions
-} from '@/lib/auth/session-manager'
+import { getAuthOptions } from '@/lib/auth/auth'
+import { updateSessionInfo, getCurrentSessionInfo, revokeMultipleSessions } from '@/lib/auth/session-manager'
 import { getLocationFromIP } from '@/lib/location-utils'
+import { parseDeviceInfo, capitalizeDeviceType } from '@/lib/auth/utils'
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession(getAuthOptions())
     
     if (!session?.user?.id) {
       return new NextResponse(JSON.stringify({ error: 'Unauthorized' }), {
@@ -47,23 +43,18 @@ export async function GET(request: NextRequest) {
       ipAddress = ipAddress.substring(7)
     }
 
-
-
     // Get current session token from cookies
     const currentSessionToken = request.cookies.get('next-auth.session-token')?.value ||
                                request.cookies.get('__Secure-next-auth.session-token')?.value
 
-    // Get all active sessions for the user
-    const allSessions = await getAllActiveSessions(session.user.id)
-
-    // Update the current session with the latest device info and location
-    if (currentSessionToken && (userAgent || ipAddress)) {
+    // Update the current session with device information if we have it
+    if (currentSessionToken && userAgent && ipAddress) {
       try {
-        // Get location data if we have an IP address
-        let locationData = {}
+        // Get location data for the IP address
+        let locationData: any = {}
         if (ipAddress && ipAddress !== '127.0.0.1' && ipAddress !== 'localhost' && ipAddress !== '::1') {
           locationData = await getLocationFromIP(ipAddress)
-        } else if (ipAddress) {
+        } else {
           locationData = {
             city: 'Localhost',
             country: 'Development',
@@ -72,22 +63,69 @@ export async function GET(request: NextRequest) {
           }
         }
 
-        const updateResult = await updateSessionInfo(
-          currentSessionToken, 
-          userAgent, 
-          ipAddress, 
+        // Update session with device and location info
+        await updateSessionInfo(
+          currentSessionToken,
+          userAgent,
+          ipAddress,
           session.user.id,
           locationData
         )
-        
+      } catch (updateError) {
+        // console.error('Error updating session info:', updateError)
+      }
+    } else {
+      // If no session token or device info, try to create/update a session
+      try {
+        // Find the most recent session for this user
+        const recentSession = await prisma.session.findFirst({
+          where: {
+            userId: session.user.id,
+            expires: { gt: new Date() }
+          },
+          orderBy: { createdAt: 'desc' }
+        })
 
-      } catch (error) {
-        // Continue with fetching sessions even if update fails
+        if (recentSession && userAgent && ipAddress) {
+          // Get location data for the IP address
+          let locationData: any = {}
+          if (ipAddress && ipAddress !== '127.0.0.1' && ipAddress !== 'localhost' && ipAddress !== '::1') {
+            locationData = await getLocationFromIP(ipAddress)
+          } else {
+            locationData = {
+              city: 'Localhost',
+              country: 'Development',
+              latitude: null,
+              longitude: null
+            }
+          }
+
+          // Parse device info using utility functions
+          const deviceInfo = parseDeviceInfo(userAgent)
+          
+          // Update the session with device and location info
+          await prisma.session.update({
+            where: { id: recentSession.id },
+            data: {
+              userAgent: userAgent,
+              ipAddress: ipAddress,
+              deviceType: capitalizeDeviceType(deviceInfo.deviceType),
+              deviceModel: deviceInfo.deviceModel || 'Unknown Device',
+              city: locationData.city || null,
+              country: locationData.country || null,
+              latitude: locationData.latitude || null,
+              longitude: locationData.longitude || null,
+              updatedAt: new Date()
+            }
+          })
+        }
+      } catch (updateError) {
+        // console.error('Error updating session info:', updateError)
       }
     }
 
-    // Re-fetch sessions to get updated info
-    const updatedSessions = await prisma.session.findMany({
+    // Get all active sessions for the user
+    const allSessions = await prisma.session.findMany({
       where: {
         userId: session.user.id,
         expires: { gt: new Date() }
@@ -113,7 +151,7 @@ export async function GET(request: NextRequest) {
 
 
 
-    return NextResponse.json(updatedSessions)
+    return NextResponse.json(allSessions)
   } catch (error) {
     return new NextResponse(JSON.stringify({ error: 'Internal Server Error' }), {
       status: 500,
@@ -121,9 +159,9 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export async function DELETE(request: Request) {
+export async function DELETE(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession(getAuthOptions())
     
     if (!session?.user?.id) {
       return new NextResponse(JSON.stringify({ error: 'Unauthorized' }), {
@@ -162,25 +200,27 @@ export async function DELETE(request: Request) {
     const isCurrentSessionDeleted = currentSession && validIds.includes(currentSession.id)
 
     // Revoke the sessions using the session manager
-    const deletedCount = await revokeMultipleSessions(validIds, session.user.id)
-
-    if (deletedCount === 0) {
-      return new NextResponse(JSON.stringify({ error: 'No sessions were deleted' }), {
-        status: 404,
-      })
-    }
-
-    // If current session was deleted, return special response to trigger logout
     if (isCurrentSessionDeleted) {
+      // If current session is being deleted, revoke it and return logout required
+      const deleteResult = await prisma.session.deleteMany({
+        where: {
+          id: { in: validIds },
+          userId: session.user.id
+        }
+      })
+      
       return NextResponse.json({ 
         success: true, 
-        deletedCount,
-        message: `Successfully deleted ${deletedCount} session(s)`,
+        deletedCount: deleteResult.count,
+        message: `Successfully deleted ${deleteResult.count} session(s)`,
         logoutRequired: true,
         reason: 'Current session was revoked'
       })
     }
 
+    // If current session was not deleted, proceed with deleting other sessions
+    const deletedCount = await revokeMultipleSessions(validIds, session.user.id)
+    
     return NextResponse.json({ 
       success: true, 
       deletedCount,

@@ -41,6 +41,7 @@ export const credentialsProvider = CredentialsProvider({
         email: true,
         image: true,
         role: true,
+        isActive: true,
         password: true
       }
     }) as (PrismaUser & { password: string | null }) | null;
@@ -63,7 +64,8 @@ export const credentialsProvider = CredentialsProvider({
       email: user.email,
       name: user.name,
       image: user.image,
-      role: user.role
+      role: user.role,
+      isActive: user.isActive
     };
   }
 });

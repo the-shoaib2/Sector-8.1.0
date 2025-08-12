@@ -2,14 +2,14 @@ import { getServerSession } from "next-auth/next";
 import { NextApiRequest, NextApiResponse } from "next";
 import { UAParser } from 'ua-parser-js';
 import { PrismaClient } from "@prisma/client";
-import { authOptions } from '@/lib/auth/auth';
-import { extractClientInfo, capitalizeDeviceType } from '@/lib/auth/utils';
+import { getAuthOptions } from '@/lib/auth/auth';
+import { capitalizeDeviceType } from '@/lib/auth/utils';
 
 const prisma = new PrismaClient();
 
 // Helper function to get session with device info (for API routes)
 export const getServerAuthSessionForApi = async (req: NextApiRequest, res: NextApiResponse) => {
-  const session = await getServerSession(req, res, authOptions);
+  const session = await getServerSession(req, res, getAuthOptions());
 
   if (session) {
     const userAgent = req.headers['user-agent'] || '';
@@ -53,7 +53,7 @@ export const getServerAuthSessionForApi = async (req: NextApiRequest, res: NextA
 
 // For Server Components
 export const getServerAuthSession = async () => {
-  return await getServerSession(authOptions);
+  return await getServerSession(getAuthOptions());
 };
 
 // For API routes

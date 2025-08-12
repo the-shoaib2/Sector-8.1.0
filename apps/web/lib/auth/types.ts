@@ -19,13 +19,33 @@ declare module "next-auth" {
   }
 }
 
-// Extend the JWT type
-declare module "next-auth/jwt" {
-  interface JWT {
-    role: string;
-    isActive: boolean;
+// Extend the database session type for database strategy
+declare module "next-auth/adapters" {
+  interface Session {
+    id: string;
+    sessionToken: string;
+    userId: string;
+    expires: Date;
+    ipAddress?: string | null;
+    userAgent?: string | null;
+    deviceType?: string | null;
+    deviceModel?: string | null;
+    city?: string | null;
+    country?: string | null;
+    latitude?: number | null;
+    longitude?: number | null;
+    createdAt: Date;
+    updatedAt: Date;
   }
 }
+
+// Extend the JWT type (only needed if using JWT strategy)
+// declare module "next-auth/jwt" {
+//   interface JWT {
+//     role: string;
+//     isActive: boolean;
+//   }
+// }
 
 // Custom types for authentication
 export interface AuthUser {

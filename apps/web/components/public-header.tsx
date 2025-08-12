@@ -76,7 +76,13 @@ export function PublicHeader() {
 
         {session ? (
           <div className="hidden md:flex items-center gap-4">
-            <UserAvatar user={session.user} />
+            <UserAvatar user={{
+              id: session.user.id,
+              name: session.user.name || undefined,
+              email: session.user.email || undefined,
+              image: session.user.image || undefined,
+              role: session.user.role || undefined
+            }} />
           </div>
         ) : (
           <div className="hidden md:flex items-center space-x-2">

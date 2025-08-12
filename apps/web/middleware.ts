@@ -39,19 +39,17 @@ export async function middleware(request: NextRequest) {
     pathname === page || pathname.startsWith(page + '/')
   )
 
-  // Check for session token in cookies
-  const sessionToken = request.cookies.get('next-auth.session-token')?.value ||
-                      request.cookies.get('__Secure-next-auth.session-token')?.value
+  // For now, let the page-level authentication handle protection
+  // This avoids issues with cookie detection in middleware
+  // The pages will use getServerSession to check authentication
+  
+  // Only handle redirecting authenticated users away from auth pages
+  const hasAnyAuthCookie = request.cookies.get('next-auth.session-token')?.value ||
+                          request.cookies.get('__Secure-next-auth.session-token')?.value ||
+                          request.cookies.get('next-auth.csrf-token')?.value ||
+                          request.cookies.get('__Secure-next-auth.csrf-token')?.value
 
-  // Handle protected routes - redirect to login with callbackUrl
-  if (isProtectedRoute && !sessionToken) {
-    const loginUrl = new URL('/login', request.url)
-    loginUrl.searchParams.set('callbackUrl', pathname)
-    return NextResponse.redirect(loginUrl)
-  }
-
-  // Redirect authenticated users away from auth pages
-  if (isAuthPage && sessionToken) {
+  if (isAuthPage && hasAnyAuthCookie) {
     const callbackUrl = request.nextUrl.searchParams.get('callbackUrl') || '/profile'
     const redirectUrl = new URL(callbackUrl, request.url)
     
@@ -61,15 +59,6 @@ export async function middleware(request: NextRequest) {
     }
     
     return NextResponse.redirect(redirectUrl)
-  }
-
-  // For authenticated users on protected routes, trigger session update
-  if (isProtectedRoute && sessionToken) {
-    // Add a header to indicate this is a protected route request
-    // This can be used by API routes to update session info
-    const response = NextResponse.next()
-    response.headers.set('x-session-update', 'true')
-    return response
   }
 
   // Ensure proper cookie handling for OAuth

@@ -30,7 +30,7 @@ export default function AIPromptInput() {
   const handleSubmit = async () => {
     if (value.trim() && !isProcessing) {
       setIsProcessing(true)
-      console.log("Submitting:", value)
+              // console.log("Submitting:", value)
 
       // Simulate processing
       setTimeout(() => {

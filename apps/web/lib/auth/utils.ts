@@ -186,4 +186,64 @@ export function parseDeviceInfo(userAgent: string) {
 export function capitalizeDeviceType(deviceType: string): string {
   if (!deviceType) return 'Unknown';
   return deviceType.charAt(0).toUpperCase() + deviceType.slice(1).toLowerCase();
+}
+
+// Format location information
+export function formatLocation(city?: string | null, country?: string | null, ipAddress?: string | null): string {
+  if (city && country) {
+    return `${city}, ${country}`;
+  } else if (city) {
+    return city;
+  } else if (country) {
+    return country;
+  } else if (ipAddress) {
+    return ipAddress === '127.0.0.1' || ipAddress === 'localhost' ? 'Localhost' : 'Unknown Location';
+  }
+  return 'Unknown Location';
+}
+
+// Format IP address
+export function formatIpAddress(ipAddress?: string | null): string {
+  if (!ipAddress) return 'N/A';
+  if (ipAddress === '127.0.0.1' || ipAddress === 'localhost' || ipAddress === '::1') {
+    return 'Localhost';
+  }
+  return ipAddress;
+}
+
+// Get browser information from user agent
+export function getBrowserInfo(userAgent?: string | null): { name: string; version?: string } {
+  if (!userAgent) return { name: 'N/A' };
+  
+  const ua = userAgent.toLowerCase();
+  
+  if (ua.includes('chrome')) return { name: 'Chrome' };
+  if (ua.includes('firefox')) return { name: 'Firefox' };
+  if (ua.includes('safari') && !ua.includes('chrome')) return { name: 'Safari' };
+  if (ua.includes('edge')) return { name: 'Edge' };
+  if (ua.includes('opera')) return { name: 'Opera' };
+  
+  return { name: 'Unknown Browser' };
+}
+
+// Check if session is current session (placeholder function)
+export function isCurrentSession(session: any): boolean {
+  // This is a placeholder - in a real implementation, you'd compare with the current session
+  return false;
+}
+
+// Get current session token from browser cookies
+export function getCurrentSessionTokenFromBrowser(): string {
+  if (typeof window === 'undefined') return '';
+  
+  // Try to get the session token from cookies
+  const cookies = document.cookie.split(';');
+  for (const cookie of cookies) {
+    const [name, value] = cookie.trim().split('=');
+    if (name === 'next-auth.session-token' || name === '__Secure-next-auth.session-token') {
+      return value || '';
+    }
+  }
+  
+  return '';
 } 

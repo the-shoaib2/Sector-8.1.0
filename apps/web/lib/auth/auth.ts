@@ -22,6 +22,7 @@ export function getAuthOptions(): AuthOptions {
   
   return {
     adapter: PrismaAdapter(prisma),
+    // debug: process.env.NODE_ENV === 'development',
     providers: [
       GoogleProvider({
         clientId: process.env.GOOGLE_CLIENT_ID!,

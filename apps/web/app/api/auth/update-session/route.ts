@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth/next'
-import { authOptions, updateSessionInfo, getCurrentSessionInfo } from '@/lib/auth/auth'
+import { getAuthOptions } from '@/lib/auth/auth'
+import { updateSessionInfo, getCurrentSessionInfo } from '@/lib/auth/session-manager'
 import { prisma } from '@/lib/prisma'
 import { getLocationFromIP } from '@/lib/location-utils'
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession(getAuthOptions())
     
     if (!session?.user?.id) {
       return new NextResponse(JSON.stringify({ error: 'Unauthorized' }), {

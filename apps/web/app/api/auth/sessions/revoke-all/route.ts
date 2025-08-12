@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { getAuthOptions } from '@/lib/auth/auth'
 import { getServerSession } from 'next-auth/next'
-import { authOptions } from '@/lib/auth/auth'
 import { revokeAllSessions } from '@/lib/auth/session-manager'
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession(getAuthOptions())
     
     if (!session?.user?.id) {
       return new NextResponse(JSON.stringify({ error: 'Unauthorized' }), {

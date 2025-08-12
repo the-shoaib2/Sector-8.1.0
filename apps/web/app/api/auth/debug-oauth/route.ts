@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { authOptions } from '@/lib/auth/auth'
+import { getAuthOptions } from '@/lib/auth/auth'
 
 export async function GET(request: NextRequest) {
   try {
@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
       })
     }
 
-    const googleProvider = authOptions.providers.find(p => p.id === 'google')
+    const googleProvider = getAuthOptions().providers.find(p => p.id === 'google')
     
     const debugInfo = {
       environment: {
@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
         baseUrl: process.env.NEXTAUTH_URL || 'http://localhost:3000',
         callbackUrl: `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/auth/callback/google`,
       },
-      pages: authOptions.pages,
+      pages: getAuthOptions().pages,
       request: {
         url: request.url,
         headers: {

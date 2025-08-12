@@ -1,5 +1,5 @@
 // Main auth configuration
-export { authOptions } from './auth'
+export { getAuthOptions } from './auth'
 
 // Types
 export * from './types'
@@ -16,20 +16,18 @@ export * from './callbacks'
 // Helpers
 export * from './helpers'
 
-// Utils functions (excluding isCurrentSession to avoid conflict)
+// Utils functions
 export { 
-  extractClientInfo,
-  getCurrentSessionToken,
-  getCurrentSessionTokenFromBrowser,
   parseDeviceInfo,
   capitalizeDeviceType,
   formatLocation,
   formatIpAddress,
   getBrowserInfo,
-  isCurrentSession
+  isCurrentSession,
+  getCurrentSessionTokenFromBrowser
 } from './utils'
 
-// Session manager functions (excluding isCurrentSession)
+// Session manager functions
 export {
   getCurrentSessionInfo,
   getAllActiveSessions,

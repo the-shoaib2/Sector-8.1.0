@@ -1,13 +1,13 @@
 import { Suspense } from "react"
-import { getServerSession } from "next-auth/next"
-import { authOptions } from "@/lib/auth/auth"
-import { redirect } from "next/navigation"
+import { getServerSession } from "next-auth/next";
+import { getAuthOptions } from "@/lib/auth/auth"
+import { redirect } from "next/navigation";
+import { SettingsTabs } from "@/components/profile/profile-tabs";
 import { prisma } from "@/lib/prisma"
-import { SettingsTabs } from "@/components/profile/profile-tabs"
 import { Skeleton } from "@/components/ui/skeleton"
 
 export default async function ProfilePage() {
-  const session = await getServerSession(authOptions as GetServerSessionOptions)
+  const session = await getServerSession(getAuthOptions())
 
   if (!session?.user?.email) {
     redirect("/login")

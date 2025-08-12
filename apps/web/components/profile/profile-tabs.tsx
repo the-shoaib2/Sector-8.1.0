@@ -5,7 +5,6 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ProfileForm } from "@/components/profile/profile-form"
 import { AppearanceForm } from "@/components/profile/appearance-form"
-
 import { SecurityForm } from "@/components/profile/security-form"
 import type { User } from "@prisma/client"
 

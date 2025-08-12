@@ -5,7 +5,6 @@ import "@/styles/globals.css"
 import { ThemeProvider } from "@/components/providers/theme-provider"
 import { SessionProvider } from "@/components/providers/session-provider"
 import { QueryProvider } from "@/components/providers/query-provider"
-import { getServerAuthSession } from "@/lib/auth/auth"
 
 import { ToastProvider } from "@/components/providers/toast-provider"
 import InternetStatusBanner from "@/components/internet-status-card"
@@ -42,11 +41,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const session = await getServerAuthSession()
   return (
     <html lang="en" suppressHydrationWarning className="h-full">
       <body className={`${inter.className} h-full flex flex-col`}>
-        <SessionProvider session={session}>
+        <SessionProvider>
           <QueryProvider>
             <ThemeProvider>
               <>
