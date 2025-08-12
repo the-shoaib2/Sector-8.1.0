@@ -69,7 +69,7 @@ export function LegalContentRenderer({ data, type, isLoading = false }: LegalCon
       return (
         <div className="space-y-3">
           {content.map((item, index) => (
-            <div key={index}>
+            <div key={`array-item-${index}-${typeof item === 'string' ? item.substring(0, 10) : 'obj'}`}>
               {renderContent(item)}
             </div>
           ))}
@@ -81,7 +81,7 @@ export function LegalContentRenderer({ data, type, isLoading = false }: LegalCon
       return (
         <div className="space-y-4">
           {Object.entries(content).map(([key, value]) => (
-            <div key={key} className="space-y-2">
+            <div key={`object-${key}-${typeof value === 'string' ? value.substring(0, 10) : 'obj'}`} className="space-y-2">
               {typeof value === 'object' && value !== null && 'title' in value && (
                 <h4 className="font-semibold text-foreground text-sm">
                   {(value as any).title}
@@ -95,7 +95,7 @@ export function LegalContentRenderer({ data, type, isLoading = false }: LegalCon
               {typeof value === 'object' && value !== null && 'items' in value && Array.isArray((value as any).items) && (
                 <ul className="list-disc list-inside space-y-1 ml-4 text-sm text-muted-foreground">
                   {(value as any).items.map((item: string, index: number) => (
-                    <li key={index}>{item}</li>
+                    <li key={`list-item-${key}-${index}-${item.substring(0, 15)}`}>{item}</li>
                   ))}
                 </ul>
               )}

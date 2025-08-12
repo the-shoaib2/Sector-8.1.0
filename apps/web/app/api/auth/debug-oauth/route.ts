@@ -11,6 +11,7 @@ export async function GET(request: NextRequest) {
     }
 
     const googleProvider = getAuthOptions().providers.find(p => p.id === 'google')
+    const githubProvider = getAuthOptions().providers.find(p => p.id === 'github')
     
     const debugInfo = {
       environment: {
@@ -19,6 +20,8 @@ export async function GET(request: NextRequest) {
         NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET ? 'SET' : 'NOT SET',
         GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID ? 'SET' : 'NOT SET',
         GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET ? 'SET' : 'NOT SET',
+        GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID ? 'SET' : 'NOT SET',
+        GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET ? 'SET' : 'NOT SET',
       },
       googleProvider: googleProvider ? {
         id: googleProvider.id,
@@ -26,9 +29,16 @@ export async function GET(request: NextRequest) {
         clientSecret: (googleProvider as any).clientSecret ? 'SET' : 'NOT SET',
         authorization: (googleProvider as any).authorization,
       } : null,
+      githubProvider: githubProvider ? {
+        id: githubProvider.id,
+        clientId: (githubProvider as any).clientId ? 'SET' : 'NOT SET',
+        clientSecret: (githubProvider as any).clientSecret ? 'SET' : 'NOT SET',
+        authorization: (githubProvider as any).authorization,
+      } : null,
       callbackUrls: {
         baseUrl: process.env.NEXTAUTH_URL || 'http://localhost:3000',
-        callbackUrl: `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/auth/callback/google`,
+        googleCallbackUrl: `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/auth/callback/google`,
+        githubCallbackUrl: `${process.env.NEXTAUTH_URL || 'http://localhost:3000'}/api/auth/callback/github`,
       },
       pages: getAuthOptions().pages,
       request: {
@@ -44,7 +54,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(debugInfo)
   } catch (error) {
     console.error('Error in debug OAuth:', error)
-    return new NextResponse(JSON.stringify({ error: 'Internal Server Error' }), {
+    return NextResponse.json({ error: 'Internal Server Error' }, {
       status: 500,
     })
   }

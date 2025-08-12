@@ -56,17 +56,25 @@ export async function middleware(request: NextRequest) {
       return NextResponse.next()
     }
     
-    const callbackUrl = request.nextUrl.searchParams.get('callbackUrl') || '/'
-    const redirectUrl = new URL(callbackUrl, request.url)
+    // Get the callback URL from the query parameters
+    const callbackUrl = request.nextUrl.searchParams.get('callbackUrl')
     
-    // Prevent open redirects
-    if (!redirectUrl.pathname.startsWith('/')) {
-      redirectUrl.pathname = '/'
-    }
-    
-    // Only redirect if we're not already going to the same place
-    if (redirectUrl.pathname !== pathname) {
-      return NextResponse.redirect(redirectUrl)
+    // If there's a specific callback URL (like from OAuth), use it
+    if (callbackUrl) {
+      const redirectUrl = new URL(callbackUrl, request.url)
+      
+      // Prevent open redirects
+      if (!redirectUrl.pathname.startsWith('/')) {
+        redirectUrl.pathname = '/profile' // Fallback to profile if callback is invalid
+      }
+      
+      // Only redirect if we're not already going to the same place
+      if (redirectUrl.pathname !== pathname) {
+        return NextResponse.redirect(redirectUrl)
+      }
+    } else {
+      // Default redirect to dashboard for authenticated users on auth pages
+      return NextResponse.redirect(new URL('/dashboard', request.url))
     }
   }
 

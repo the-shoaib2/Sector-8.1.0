@@ -100,7 +100,7 @@ export default function LoginForm() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center px-4 py-8 dark:bg-gray-900">
+    <div className="flex min-h-screen flex-col items-center justify-center px-4 py-8">
       <div className="mb-4">
         <Link href="/" className="flex items-center gap-2 font-semibold">
           <Code2 className="h-6 w-6" />
@@ -180,6 +180,7 @@ export default function LoginForm() {
                   className="pl-9"
                   value={formData.email}
                   onChange={handleInputChange}
+                  autoComplete="username"
                   required
                 />
               </div>
@@ -197,6 +198,7 @@ export default function LoginForm() {
                   className="pl-9 pr-9"
                   value={formData.password}
                   onChange={handleInputChange}
+                  autoComplete="current-password"
                   required
                 />
                 <button

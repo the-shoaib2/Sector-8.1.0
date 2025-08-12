@@ -124,7 +124,7 @@ export default function RegisterForm() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center px-4 py-8 dark:bg-gray-900">
+    <div className="flex min-h-screen flex-col items-center justify-center px-4 py-8">
       <div className="mb-4">
         <Link href="/" className="flex items-center gap-2 font-semibold">
           <Code2 className="h-6 w-6" />

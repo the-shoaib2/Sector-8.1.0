@@ -60,5 +60,5 @@ export const pagesConfig = {
   signOut: '/logout',
   error: '/auth/error',
   verifyRequest: '/auth/verify-request',
-  newUser: '/auth/new-user',
+  newUser: '/dashboard', // Redirect new users directly to dashboard instead of non-existent page
 }; 
