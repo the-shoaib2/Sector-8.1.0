@@ -150,7 +150,90 @@ export function PublicHeader() {
                       <Button
                         variant="outline"
                         className="w-full mt-3 flex items-center justify-center"
-                        onClick={() => signOut({ callbackUrl: "/" })}
+                        onClick={async () => {
+                          try {
+                            // First, call our backend logout API to clear server-side session and cookies
+                            try {
+                              const response = await fetch('/api/auth/logout', { 
+                                method: 'POST',
+                                credentials: 'include' // Include cookies in the request
+                              });
+                              
+                              if (!response.ok) {
+                                console.error('Backend logout failed:', response.status);
+                              }
+                            } catch (error) {
+                              console.error('Backend logout failed:', error);
+                              // Continue with frontend logout even if backend fails
+                            }
+                            
+                            // Clear any local storage or session storage that might contain auth data
+                            if (typeof window !== 'undefined') {
+                              // Clear NextAuth.js related storage
+                              localStorage.removeItem('next-auth.session-token');
+                              localStorage.removeItem('__Secure-next-auth.session-token');
+                              localStorage.removeItem('next-auth.csrf-token');
+                              localStorage.removeItem('__Secure-next-auth.csrf-token');
+                              localStorage.removeItem('next-auth.callback-url');
+                              localStorage.removeItem('__Secure-next-auth.callback-url');
+                              
+                              // Clear session storage
+                              sessionStorage.removeItem('next-auth.session-token');
+                              sessionStorage.removeItem('__Secure-next-auth.session-token');
+                              sessionStorage.removeItem('next-auth.csrf-token');
+                              sessionStorage.removeItem('__Secure-next-auth.csrf-token');
+                              sessionStorage.removeItem('next-auth.callback-url');
+                              sessionStorage.removeItem('__Secure-next-auth.callback-url');
+                              
+                              // Clear any other auth-related storage
+                              localStorage.removeItem('auth-token');
+                              localStorage.removeItem('session-token');
+                              localStorage.removeItem('user-token');
+                              sessionStorage.removeItem('auth-token');
+                              sessionStorage.removeItem('session-token');
+                              sessionStorage.removeItem('user-token');
+                              
+                              // Client-side cookie clearing as a fallback
+                              const cookiesToClear = [
+                                'next-auth.session-token',
+                                '__Secure-next-auth.session-token',
+                                'next-auth.csrf-token',
+                                '__Secure-next-auth.csrf-token',
+                                'next-auth.callback-url',
+                                '__Secure-next-auth.callback-url',
+                                'next-auth.pkce.code-verifier',
+                                '__Secure-next-auth.pkce.code-verifier',
+                                'next-auth.state',
+                                '__Secure-next-auth.state',
+                                'next-auth.nonce',
+                                '__Secure-next-auth.nonce',
+                                'next-auth.provider',
+                                '__Secure-next-auth.provider'
+                              ];
+                              
+                              cookiesToClear.forEach(cookieName => {
+                                // Try to clear cookie by setting it to expire
+                                document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+                                document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=localhost;`;
+                                document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.localhost;`;
+                              });
+                            }
+                            
+                            // Then use NextAuth.js signOut to clear frontend session and cookies
+                            await signOut({ 
+                              callbackUrl: "/",
+                              redirect: true 
+                            });
+                            
+                            // Force refresh the page to ensure all state is cleared
+                            // This is a fallback to ensure complete cleanup
+                            setTimeout(() => {
+                              window.location.reload();
+                            }, 100);
+                          } catch (error) {
+                            console.error('Logout failed:', error);
+                          }
+                        }}
                       >
                         <LogOut className="mr-2 h-4 w-4" />
                         Log out

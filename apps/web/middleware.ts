@@ -44,21 +44,30 @@ export async function middleware(request: NextRequest) {
   // The pages will use getServerSession to check authentication
   
   // Only handle redirecting authenticated users away from auth pages
-  const hasAnyAuthCookie = request.cookies.get('next-auth.session-token')?.value ||
-                          request.cookies.get('__Secure-next-auth.session-token')?.value ||
-                          request.cookies.get('next-auth.csrf-token')?.value ||
-                          request.cookies.get('__Secure-next-auth.csrf-token')?.value
+  // But be more careful to avoid redirect loops
+  const hasSessionToken = request.cookies.get('next-auth.session-token')?.value ||
+                         request.cookies.get('__Secure-next-auth.session-token')?.value
 
-  if (isAuthPage && hasAnyAuthCookie) {
-    const callbackUrl = request.nextUrl.searchParams.get('callbackUrl') || '/profile'
+  // Only redirect if we have a session token AND we're on an auth page
+  // This prevents redirect loops when cookies exist but session is invalid
+  if (isAuthPage && hasSessionToken) {
+    // Check if we're already on the home page to prevent loops
+    if (pathname === '/') {
+      return NextResponse.next()
+    }
+    
+    const callbackUrl = request.nextUrl.searchParams.get('callbackUrl') || '/'
     const redirectUrl = new URL(callbackUrl, request.url)
     
     // Prevent open redirects
     if (!redirectUrl.pathname.startsWith('/')) {
-      redirectUrl.pathname = '/profile'
+      redirectUrl.pathname = '/'
     }
     
-    return NextResponse.redirect(redirectUrl)
+    // Only redirect if we're not already going to the same place
+    if (redirectUrl.pathname !== pathname) {
+      return NextResponse.redirect(redirectUrl)
+    }
   }
 
   // Ensure proper cookie handling for OAuth

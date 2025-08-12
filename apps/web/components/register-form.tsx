@@ -42,20 +42,22 @@ export default function RegisterForm() {
   const handleOAuthSignIn = async (provider: 'google' | 'github') => {
     try {
       setIsLoading(true)
+      
+      // For OAuth providers, we need to redirect to the OAuth flow
+      // The result will only be available after the user completes the OAuth process
       const result = await signIn(provider, {
-        redirect: false,
+        redirect: true, // Change to true for OAuth providers
         callbackUrl: '/dashboard'
       })
 
-      if (result?.error) {
-        toast.error(`Failed to sign in with ${provider}`)
-      } else {
-        toast.success(`Successfully signed in with ${provider}!`)
-        router.push('/dashboard')
-      }
+      // Note: This code won't execute immediately for OAuth providers
+      // because redirect: true will navigate away from the page
+      // The success/error handling will happen after the OAuth callback
+      
     } catch (error) {
-      toast.error(`An error occurred during ${provider} sign in`)
-    } finally {
+      // Only show error if something goes wrong before the redirect
+      console.error(`OAuth ${provider} error:`, error)
+      toast.error(`Failed to start ${provider} authentication`)
       setIsLoading(false)
     }
   }
