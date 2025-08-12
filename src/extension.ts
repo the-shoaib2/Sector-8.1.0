@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { SynapseProvider } from './providers/synapse-provider';
 import { WebviewProvider } from './providers/webview-provider';
-import { LoginProvider } from './providers/login-provider';
+import { AuthPage } from './web/auth-page';
 import { SynapseClient } from './clients/synapse-client';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -19,13 +19,19 @@ export function activate(context: vscode.ExtensionContext) {
   // Register Webview provider
   const webviewProvider = new WebviewProvider(context.extensionUri, synapseClient);
 
-  // Register Login provider
-  const loginProvider = new LoginProvider(context.extensionUri, synapseClient);
+  // Register Auth page
+  const authPage = new AuthPage(context.extensionUri, synapseClient);
 
   // Register commands
   context.subscriptions.push(
     vscode.commands.registerCommand('synapse.login', () => {
-      loginProvider.showLogin();
+      authPage.showAuth();
+    })
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand('synapse.auth', () => {
+      authPage.showAuth();
     })
   );
 

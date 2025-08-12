@@ -25,6 +25,7 @@
   "activationEvents": [
     "onStartupFinished",
     "onCommand:synapse.login",
+    "onCommand:synapse.auth",
     "onCommand:synapse.logout",
     "onCommand:synapse.openProject",
     "onCommand:synapse.showAssistant",
@@ -40,6 +41,11 @@
       {
         "command": "synapse.login",
         "title": "Synapse: Login",
+        "category": "Synapse"
+      },
+      {
+        "command": "synapse.auth",
+        "title": "Synapse: Authentication",
         "category": "Synapse"
       },
       {
@@ -77,6 +83,10 @@
       "commandPalette": [
         {
           "command": "synapse.login",
+          "when": "!synapse.isAuthenticated"
+        },
+        {
+          "command": "synapse.auth",
           "when": "!synapse.isAuthenticated"
         },
         {
@@ -171,7 +181,8 @@
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "lint": "eslint src --ext .ts",
-    "test": "node ./out/test/runTest.js"
+    "test": "node ./out/test/runTest.js",
+    "start-web": "node start-web-auth.js"
   },
   "dependencies": {
     "axios": "^1.6.2",
