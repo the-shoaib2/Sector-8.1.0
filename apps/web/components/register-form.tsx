@@ -28,7 +28,7 @@ export default function RegisterForm() {
   // Redirect if authenticated
   useEffect(() => {
     if (status === 'authenticated') {
-      router.replace('/dashboard');
+      router.replace('/profile');
     }
   }, [status, router]);
 
@@ -47,7 +47,7 @@ export default function RegisterForm() {
       // The result will only be available after the user completes the OAuth process
       const result = await signIn(provider, {
         redirect: true, // Change to true for OAuth providers
-        callbackUrl: '/dashboard'
+        callbackUrl: '/profile'
       })
 
       // Note: This code won't execute immediately for OAuth providers
@@ -73,8 +73,51 @@ export default function RegisterForm() {
       return false
     }
 
+    if (formData.name.length > 100) {
+      toast.error('Name must be less than 100 characters long')
+      return false
+    }
+
+    if (formData.email.trim().length === 0) {
+      toast.error('Please enter a valid email address')
+      return false
+    }
+
+    if (formData.email.length > 254) {
+      toast.error('Email address is too long')
+      return false
+    }
+
     if (formData.password.length < 8) {
       toast.error('Password must be at least 8 characters long')
+      return false
+    }
+
+    // Enhanced password strength validation
+    if (!/(?=.*[a-z])/.test(formData.password)) {
+      toast.error('Password must contain at least one lowercase letter')
+      return false
+    }
+
+    if (!/(?=.*[A-Z])/.test(formData.password)) {
+      toast.error('Password must contain at least one uppercase letter')
+      return false
+    }
+
+    if (!/(?=.*\d)/.test(formData.password)) {
+      toast.error('Password must contain at least one number')
+      return false
+    }
+
+    if (!/(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/.test(formData.password)) {
+      toast.error('Password must contain at least one special character (!@#$%^&*()_+-=[]{}|;:,.<>?)')
+      return false
+    }
+
+    // Check for common weak passwords
+    const weakPasswords = ['password', '123456', 'qwerty', 'abc123', 'letmein', 'admin', 'welcome'];
+    if (weakPasswords.includes(formData.password.toLowerCase())) {
+      toast.error('Password is too weak. Please choose a stronger password.')
       return false
     }
 
@@ -102,8 +145,8 @@ export default function RegisterForm() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
+          name: formData.name.trim(),
+          email: formData.email.trim(),
           password: formData.password,
         }),
       })
@@ -114,10 +157,17 @@ export default function RegisterForm() {
         toast.success('Account created successfully! Please sign in.')
         router.push('/login')
       } else {
-        toast.error(data.message || 'Registration failed')
+        // Enhanced error handling with field-specific messages
+        if (data.field && data.message) {
+          toast.error(data.message)
+          // You could highlight the specific field here if needed
+        } else {
+          toast.error(data.message || 'Registration failed')
+        }
       }
     } catch (error) {
-      toast.error('An error occurred during registration')
+      console.error('Registration error:', error)
+      toast.error('An error occurred during registration. Please try again.')
     } finally {
       setIsLoading(false)
     }
@@ -204,6 +254,7 @@ export default function RegisterForm() {
                   className="pl-9"
                   value={formData.name}
                   onChange={handleInputChange}
+                  autoComplete="name"
                   required
                 />
               </div>
@@ -221,6 +272,7 @@ export default function RegisterForm() {
                   className="pl-9"
                   value={formData.email}
                   onChange={handleInputChange}
+                  autoComplete="email"
                   required
                 />
               </div>
@@ -238,6 +290,7 @@ export default function RegisterForm() {
                   className="pl-9 pr-9"
                   value={formData.password}
                   onChange={handleInputChange}
+                  autoComplete="new-password"
                   required
                 />
                 <button
@@ -262,6 +315,7 @@ export default function RegisterForm() {
                   className="pl-9 pr-9"
                   value={formData.confirmPassword}
                   onChange={handleInputChange}
+                  autoComplete="new-password"
                   required
                 />
                 <button

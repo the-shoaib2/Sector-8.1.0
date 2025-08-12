@@ -69,10 +69,10 @@ export default function BackgroundPaths({
         >
           <h1 className="text-5xl sm:text-7xl md:text-8xl font-bold mb-4 tracking-tighter text-foreground bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
             {mainTitle.split(" ").map((word, wordIndex) => (
-              <span key={wordIndex} className="inline-block mr-4 last:mr-0">
+              <span key={`word-${wordIndex}-${word}`} className="inline-block mr-4 last:mr-0">
                 {word.split("").map((letter, letterIndex) => (
                   <motion.span
-                    key={`${wordIndex}-${letterIndex}`}
+                    key={`letter-${wordIndex}-${letterIndex}-${letter}`}
                     initial={{ y: 100, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{

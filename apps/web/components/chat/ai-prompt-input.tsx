@@ -109,20 +109,22 @@ export default function AIPromptInput() {
               {isRecording && (
                 <>
                   <Button
+                    key="pause-play"
                     onClick={togglePause}
                     variant="outline"
                     size="sm"
                     className="h-10 w-10 p-0 rounded-full border-2 hover:scale-105 transition-all duration-200 bg-transparent"
                   >
-                    {isPaused ? <Play className="w-4 h-4" /> : <Pause className="w-4 h-4" />}
+                    {isPaused ? <Play className="w-4 w-4" /> : <Pause className="w-4 w-4" />}
                   </Button>
                   <Button
+                    key="stop-recording"
                     onClick={stopRecording}
                     variant="outline"
                     size="sm"
                     className="h-10 w-10 p-0 rounded-full border-2 hover:scale-105 transition-all duration-200 border-red-200 hover:bg-red-50 bg-transparent"
                   >
-                    <Square className="w-4 h-4 text-red-500" />
+                    <Square className="w-4 w-4 text-red-500" />
                   </Button>
                 </>
               )}

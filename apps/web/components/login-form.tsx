@@ -36,7 +36,7 @@ export default function LoginForm() {
   // Redirect if authenticated
   useEffect(() => {
     if (status === 'authenticated') {
-      router.replace('/dashboard');
+      router.replace('/profile');
     }
   }, [status, router]);
 
@@ -55,7 +55,7 @@ export default function LoginForm() {
       // The result will only be available after the user completes the OAuth process
       const result = await signIn(provider, {
         redirect: true, // Change to true for OAuth providers
-        callbackUrl: '/dashboard'
+        callbackUrl: '/profile'
       })
 
       // Note: This code won't execute immediately for OAuth providers
@@ -80,20 +80,51 @@ export default function LoginForm() {
 
     try {
       setIsLoading(true)
+      
+      // Enhanced validation before submission
+      if (formData.email.trim().length === 0) {
+        toast.error('Please enter a valid email address')
+        return
+      }
+
+      if (formData.password.trim().length === 0) {
+        toast.error('Please enter your password')
+        return
+      }
+
       const result = await signIn('credentials', {
-        email: formData.email,
+        email: formData.email.trim(),
         password: formData.password,
         redirect: false
       })
 
       if (result?.error) {
-        toast.error(result.error)
+        // Enhanced error handling with specific messages
+        let errorMessage = result.error
+        
+        // Provide user-friendly error messages
+        if (result.error.includes('Account temporarily locked')) {
+          errorMessage = result.error
+        } else if (result.error.includes('Invalid email or password')) {
+          errorMessage = 'Invalid email or password. Please check your credentials and try again.'
+        } else if (result.error.includes('OAuth')) {
+          errorMessage = 'This account was created with Google or GitHub. Please use the OAuth login option.'
+        } else if (result.error.includes('deactivated')) {
+          errorMessage = 'Your account has been deactivated. Please contact support for assistance.'
+        } else if (result.error.includes('verify your email')) {
+          errorMessage = 'Please verify your email address before signing in. Check your inbox for a verification link.'
+        } else if (result.error.includes('An error occurred')) {
+          errorMessage = 'An error occurred during authentication. Please try again in a few moments.'
+        }
+        
+        toast.error(errorMessage)
       } else {
         toast.success('Successfully signed in!')
-        router.push('/dashboard')
+        router.push('/profile')
       }
     } catch (error) {
-      toast.error('An error occurred during sign in')
+      console.error('Login error:', error)
+      toast.error('An error occurred during sign in. Please try again.')
     } finally {
       setIsLoading(false)
     }

@@ -64,7 +64,7 @@ export function PublicFooter() {
             </p>
             <div className="flex space-x-2">
               {socialLinks.map((social, index) => (
-                <Button key={index} variant="ghost" size="sm" asChild className="h-8 w-8 p-0">
+                <Button key={`social-${index}`} variant="ghost" size="sm" asChild className="h-8 w-8 p-0">
                   <Link href={social.href} className="text-muted-foreground hover:text-foreground">
                     {social.icon}
                   </Link>
@@ -73,12 +73,12 @@ export function PublicFooter() {
             </div>
           </div>
 
-          {footerLinks.map((section, index) => (
-            <div key={index} className="space-y-3">
+          {footerLinks.map((section) => (
+            <div key={section.title} className="space-y-3">
               <h3 className="text-xs font-semibold uppercase tracking-wide">{section.title}</h3>
               <ul className="space-y-1.5">
-                {section.links.map((link, linkIndex) => (
-                  <li key={linkIndex}>
+                {section.links.map((link) => (
+                  <li key={link.name}>
                     <button
                       onClick={() => handleNavigation(link.href)}
                       className="text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer"

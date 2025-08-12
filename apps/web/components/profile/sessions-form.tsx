@@ -277,7 +277,7 @@ export function SessionsForm({ user }: SessionsFormProps) {
           <div className="h-4 bg-gray-200 rounded w-1/2 mb-8"></div>
           <div className="space-y-3">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-24 bg-gray-200 rounded"></div>
+              <div key={`session-skeleton-${i}`} className="h-24 bg-gray-200 rounded"></div>
             ))}
           </div>
         </div>

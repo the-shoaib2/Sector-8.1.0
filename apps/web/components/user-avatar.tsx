@@ -199,7 +199,7 @@ export function UserAvatar({ user, className = '' }: UserAvatarProps) {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-          <DropdownMenuItem asChild>
+          <DropdownMenuItem key="home" asChild>
               <button
                 className="w-full flex items-center cursor-pointer"
                 onClick={() => handleNavigation('/')}
@@ -208,7 +208,7 @@ export function UserAvatar({ user, className = '' }: UserAvatarProps) {
                 <span>Home</span>
               </button>
             </DropdownMenuItem>
-            <DropdownMenuItem asChild>
+            <DropdownMenuItem key="profile" asChild>
               <button
                 className="w-full flex items-center cursor-pointer"
                 onClick={() => handleNavigation('/profile')}
@@ -225,15 +225,15 @@ export function UserAvatar({ user, className = '' }: UserAvatarProps) {
               </DropdownMenuSubTrigger>
               <DropdownMenuPortal>
                 <DropdownMenuSubContent>
-                  <DropdownMenuItem onClick={() => setTheme('light')}>
+                  <DropdownMenuItem key="theme-light" onClick={() => setTheme('light')}>
                     <Sun className="mr-2 h-4 w-4" />
                     <span>Light</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setTheme('dark')}>
+                  <DropdownMenuItem key="theme-dark" onClick={() => setTheme('dark')}>
                     <Moon className="mr-2 h-4 w-4" />
                     <span>Dark</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setTheme('system')}>
+                  <DropdownMenuItem key="theme-system" onClick={() => setTheme('system')}>
                     <Laptop className="mr-2 h-4 w-4" />
                     <span>System</span>
                   </DropdownMenuItem>
@@ -243,6 +243,7 @@ export function UserAvatar({ user, className = '' }: UserAvatarProps) {
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem 
+            key="logout"
             className="cursor-pointer text-destructive focus:text-destructive focus:bg-destructive/10"
             onClick={() => setShowLogoutDialog(true)}
           >

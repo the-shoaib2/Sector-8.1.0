@@ -29,7 +29,7 @@ export function ResponsiveTable({ columns, data, emptyMessage = "No data availab
     return (
       <div className="space-y-4">
         {data.map((row, rowIndex) => (
-          <Card key={rowIndex} className="p-4">
+          <Card key={`mobile-row-${rowIndex}`} className="p-4">
             {columns.map((column) => (
               <div key={column.key} className="flex justify-between py-2 border-b last:border-0">
                 <span className="font-medium">{column.title}</span>
@@ -53,7 +53,7 @@ export function ResponsiveTable({ columns, data, emptyMessage = "No data availab
       </TableHeader>
       <TableBody>
         {data.map((row, rowIndex) => (
-          <TableRow key={rowIndex}>
+          <TableRow key={`table-row-${rowIndex}`}>
             {columns.map((column) => (
               <TableCell key={column.key}>
                 {column.render ? column.render(row[column.key], row) : row[column.key]}

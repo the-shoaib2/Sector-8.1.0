@@ -51,13 +51,13 @@ export default function NotFound() {
             {session ? (
               <>
                 <Button asChild className="flex-1">
-                  <Link href="/dashboard">
-                    <LayoutDashboard className="w-4 h-4 mr-2" />
-                    Dashboard
+                  <Link href="/profile">
+                    <LayoutDashboard className="w-4 w-4 mr-2" />
+                    Profile
                   </Link>
                 </Button>
                 <Button variant="outline" onClick={() => window.history.back()} className="flex-1">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  <ArrowLeft className="w-4 w-4 mr-2" />
                   Go Back
                 </Button>
               </>

@@ -15,14 +15,14 @@ export function validateEnvironmentVariables() {
   }
 }
 
-// Session configuration
+// Session configuration with enhanced security
 export const sessionConfig = {
   strategy: "database" as SessionStrategy,
   maxAge: 30 * 24 * 60 * 60, // 30 days
   updateAge: 24 * 60 * 60, // 24 hours
 };
 
-// Cookie configuration
+// Cookie configuration with enhanced security
 export const cookieConfig = {
   sessionToken: {
     name: `next-auth.session-token`,
@@ -51,6 +51,37 @@ export const cookieConfig = {
       secure: process.env.NODE_ENV === "production",
     },
   },
+  // Enhanced security cookies
+  pkceCodeVerifier: {
+    name: `next-auth.pkce.code_verifier`,
+    options: {
+      httpOnly: true,
+      sameSite: "lax" as const,
+      path: "/",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 60 * 10, // 10 minutes
+    },
+  },
+  state: {
+    name: `next-auth.state`,
+    options: {
+      httpOnly: true,
+      sameSite: "lax" as const,
+      path: "/",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 60 * 15, // 15 minutes
+    },
+  },
+  nonce: {
+    name: `next-auth.nonce`,
+    options: {
+      httpOnly: true,
+      sameSite: "lax" as const,
+      path: "/",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 60 * 15, // 15 minutes
+    },
+  },
 };
 
 // Pages configuration
@@ -60,5 +91,5 @@ export const pagesConfig = {
   signOut: '/logout',
   error: '/auth/error',
   verifyRequest: '/auth/verify-request',
-  newUser: '/dashboard', // Redirect new users directly to dashboard instead of non-existent page
+  newUser: '/profile', // Redirect new users to profile page
 }; 

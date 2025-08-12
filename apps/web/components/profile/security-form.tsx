@@ -96,7 +96,7 @@ interface Session {
 const TableSkeleton = () => (
   <>
     {Array.from({ length: 5 }).map((_, index) => (
-      <TableRow key={index}>
+      <TableRow key={`skeleton-row-${index}`}>
         <TableCell>
           <Skeleton className="h-4 w-4" />
         </TableCell>
@@ -597,7 +597,7 @@ export function SecurityForm({ user }: SecurityFormProps) {
               <div className="space-y-3">
                 {isLoading ? (
                   Array.from({ length: 3 }).map((_, index) => (
-                    <div key={index} className="p-4 border rounded-lg space-y-2">
+                    <div key={`mobile-skeleton-${index}`} className="p-4 border rounded-lg space-y-2">
                       <div className="flex items-center gap-2">
                         <Skeleton className="h-4 w-4" />
                         <Skeleton className="h-4 w-32" />

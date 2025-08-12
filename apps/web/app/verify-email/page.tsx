@@ -111,7 +111,7 @@ export default function VerifyEmailPage() {
               </p>
               <div className="mt-5">
                 <Button asChild className="w-full">
-                  <Link href="/dashboard">Go to Dashboard</Link>
+                  <Link href="/profile">Go to Profile</Link>
                 </Button>
               </div>
             </div>

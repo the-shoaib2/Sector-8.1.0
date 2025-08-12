@@ -47,7 +47,7 @@ export default async function RootLayout({
         <SessionProvider>
           <QueryProvider>
             <ThemeProvider>
-              <>
+              <div className="flex flex-col min-h-screen">
                 <InternetStatusBanner />
                 <div className="flex flex-col overflow-hidden min-h-screen">
                   <LoadingBar />
@@ -58,7 +58,7 @@ export default async function RootLayout({
                   </main>
                 </div>
                 <ToastProvider />
-              </>
+              </div>
             </ThemeProvider>
           </QueryProvider>
         </SessionProvider>
