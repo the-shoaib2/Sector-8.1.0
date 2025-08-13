@@ -23,12 +23,7 @@
     "education"
   ],
   "activationEvents": [
-    "onCommand:synapse.login",
-    "onCommand:synapse.openProject",
-    "onCommand:synapse.showAssistant",
-    "onCommand:synapse.visualizeCode",
-    "onCommand:synapse.analyzeContext",
-    "onWebviewPanel:synapse.visualization"
+    "onStartupFinished"
   ],
   "main": "./dist/extension.js",
   "contributes": {
@@ -73,38 +68,47 @@
       "commandPalette": [
         {
           "command": "synapse.login",
-          "when": "!synapse.isAuthenticated"
+          "when": "true"
         },
         {
           "command": "synapse.logout",
-          "when": "synapse.isAuthenticated"
+          "when": "true"
         },
         {
           "command": "synapse.openProject",
-          "when": "synapse.isAuthenticated"
+          "when": "true"
         },
         {
           "command": "synapse.showAssistant",
-          "when": "synapse.isAuthenticated"
+          "when": "true"
         },
         {
           "command": "synapse.visualizeCode",
-          "when": "synapse.isAuthenticated"
+          "when": "true"
         },
         {
           "command": "synapse.analyzeContext",
-          "when": "synapse.isAuthenticated"
+          "when": "true"
+        },
+        {
+          "command": "synapse.exportVisualization",
+          "when": "true"
         }
       ],
       "editor/context": [
         {
           "command": "synapse.visualizeCode",
-          "when": "synapse.isAuthenticated && editorTextFocus",
+          "when": "editorTextFocus",
           "group": "synapse"
         },
         {
           "command": "synapse.analyzeContext",
-          "when": "synapse.isAuthenticated && editorTextFocus",
+          "when": "editorTextFocus",
+          "group": "synapse"
+        },
+        {
+          "command": "synapse.exportVisualization",
+          "when": "editorTextFocus",
           "group": "synapse"
         }
       ]

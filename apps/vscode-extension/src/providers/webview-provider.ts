@@ -1,84 +1,78 @@
 import * as vscode from 'vscode';
-import { SectorClient } from '../clients/synapse-client';
+import { AuthService } from '../services/auth-service';
 
 export class WebviewProvider {
-  private readonly _viewType = 'synapse.webview';
-  private _panel: vscode.WebviewPanel | undefined = undefined;
+  private readonly context: vscode.ExtensionContext;
+  private readonly authService: AuthService;
 
-  constructor(
-    private readonly _extensionUri: vscode.Uri,
-    private readonly _synapseClient: SectorClient
-  ) {}
-
-  showAssistant(): void {
-    this._showWebview('Synapse AI Assistant', 'assistant');
+  constructor(context: vscode.ExtensionContext, authService: AuthService) {
+    this.context = context;
+    this.authService = authService;
   }
 
-  showVisualization(uri: vscode.Uri): void {
-    this._showWebview('Code Visualization', 'visualization', { uri: uri.toString() });
-  }
-
-  showContextAnalysis(uri: vscode.Uri): void {
-    this._showWebview('Context Analysis', 'context', { uri: uri.toString() });
-  }
-
-  private _showWebview(title: string, type: string, data?: any): void {
-    const column = vscode.window.activeTextEditor
-      ? vscode.window.activeTextEditor.viewColumn
-      : undefined;
-
-    if (this._panel) {
-      this._panel.reveal(column);
-      this._panel.webview.postMessage({ type: 'update', data });
-      return;
-    }
-
-    this._panel = vscode.window.createWebviewPanel(
-      this._viewType,
-      title,
-      column || vscode.ViewColumn.One,
+  showProject(project: any): void {
+    const panel = vscode.window.createWebviewPanel(
+      'synapseProject',
+      `Project: ${project.name}`,
+      vscode.ViewColumn.One,
       {
         enableScripts: true,
-        localResourceRoots: [
-          vscode.Uri.joinPath(this._extensionUri, 'media'),
-          vscode.Uri.joinPath(this._extensionUri, 'out/compiled'),
-        ],
+        retainContextWhenHidden: true
       }
     );
 
-    this._panel.webview.html = this._getHtmlForWebview(this._panel.webview, type, data);
-
-    this._panel.webview.onDidReceiveMessage(
-      message => {
-        switch (message.command) {
-          case 'sendPrompt':
-            this._handleSendPrompt(message.data);
-            break;
-          case 'executeCode':
-            this._handleExecuteCode(message.data);
-            break;
-          case 'analyzeContext':
-            this._handleAnalyzeContext(message.data);
-            break;
-          case 'createVisualization':
-            this._handleCreateVisualization(message.data);
-            break;
-        }
-      }
-    );
-
-    this._panel.onDidDispose(() => {
-      this._panel = undefined;
-    });
+    panel.webview.html = this.getProjectHtml(panel.webview, project);
   }
 
-  private _getHtmlForWebview(webview: vscode.Webview, type: string, data?: any): string {
-    const baseHtml = `<!DOCTYPE html>
+  showAssistant(): void {
+    const panel = vscode.window.createWebviewPanel(
+      'synapseAssistant',
+      'Synapse AI Assistant',
+      vscode.ViewColumn.Two,
+      {
+        enableScripts: true,
+        retainContextWhenHidden: true
+      }
+    );
+
+    panel.webview.html = this.getAssistantHtml(panel.webview);
+  }
+
+  showVisualization(visualization: any): void {
+    const panel = vscode.window.createWebviewPanel(
+      'synapseVisualization',
+      'Code Visualization',
+      vscode.ViewColumn.Two,
+      {
+        enableScripts: true,
+        retainContextWhenHidden: true
+      }
+    );
+
+    panel.webview.html = this.getVisualizationHtml(panel.webview, visualization);
+  }
+
+  showAnalysis(analysis: any): void {
+    const panel = vscode.window.createWebviewPanel(
+      'synapseAnalysis',
+      'Code Analysis',
+      vscode.ViewColumn.Two,
+      {
+        enableScripts: true,
+        retainContextWhenHidden: true
+      }
+    );
+
+    panel.webview.html = this.getAnalysisHtml(panel.webview, analysis);
+  }
+
+  private getProjectHtml(webview: vscode.Webview, project: any): string {
+    return `<!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Synapse - ${type}</title>
+        <title>${project.name}</title>
         <style>
             body {
                 padding: 20px;
@@ -86,52 +80,45 @@ export class WebviewProvider {
                 color: var(--vscode-foreground);
                 background-color: var(--vscode-editor-background);
             }
-            .container {
-                max-width: 800px;
-                margin: 0 auto;
-            }
-            .header {
-                text-align: center;
-                margin-bottom: 30px;
-            }
-            .title {
-                font-size: 2em;
-                font-weight: bold;
-                margin-bottom: 10px;
-                background: linear-gradient(45deg, #3b82f6, #8b5cf6);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-            }
-            .input-group {
+            .project-header {
+                border-bottom: 1px solid var(--vscode-panel-border);
+                padding-bottom: 20px;
                 margin-bottom: 20px;
             }
-            .input-group label {
-                display: block;
-                margin-bottom: 5px;
+            .project-name {
+                font-size: 24px;
                 font-weight: bold;
+                margin-bottom: 10px;
             }
-            .input-group input, .input-group textarea {
-                width: 100%;
-                padding: 10px;
-                border: 1px solid var(--vscode-input-border);
-                border-radius: 4px;
-                background-color: var(--vscode-input-background);
-                color: var(--vscode-input-foreground);
-                font-family: var(--vscode-font-family);
+            .project-description {
+                color: var(--vscode-descriptionForeground);
+                margin-bottom: 10px;
             }
-            .input-group textarea {
-                min-height: 100px;
-                resize: vertical;
+            .project-meta {
+                display: flex;
+                gap: 20px;
+                font-size: 14px;
+                color: var(--vscode-descriptionForeground);
+            }
+            .section {
+                margin-bottom: 30px;
+            }
+            .section-title {
+                font-size: 18px;
+                font-weight: bold;
+                margin-bottom: 15px;
+                border-bottom: 1px solid var(--vscode-panel-border);
+                padding-bottom: 5px;
             }
             .button {
                 background-color: var(--vscode-button-background);
                 color: var(--vscode-button-foreground);
                 border: none;
-                padding: 10px 20px;
+                padding: 8px 16px;
                 border-radius: 4px;
                 cursor: pointer;
-                font-size: 14px;
                 margin-right: 10px;
+                margin-bottom: 10px;
             }
             .button:hover {
                 background-color: var(--vscode-button-hoverBackground);
@@ -140,233 +127,332 @@ export class WebviewProvider {
                 background-color: var(--vscode-button-secondaryBackground);
                 color: var(--vscode-button-secondaryForeground);
             }
-            .button.secondary:hover {
-                background-color: var(--vscode-button-secondaryHoverBackground);
+        </style>
+    </head>
+    <body>
+        <div class="project-header">
+            <div class="project-name">${project.name}</div>
+            <div class="project-description">${project.description || 'No description available'}</div>
+            <div class="project-meta">
+                <span>Created: ${new Date(project.createdAt || Date.now()).toLocaleDateString()}</span>
+                <span>Visibility: ${project.visibility || 'Private'}</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Quick Actions</div>
+            <button class="button" onclick="visualizeCode()">Visualize Code</button>
+            <button class="button" onclick="analyzeContext()">Analyze Context</button>
+            <button class="button secondary" onclick="exportProject()">Export Project</button>
+        </div>
+
+        <div class="section">
+            <div class="section-title">Recent Activity</div>
+            <div>No recent activity</div>
+        </div>
+
+        <script>
+            const vscode = acquireVsCodeApi();
+            
+            function visualizeCode() {
+                vscode.postMessage({
+                    command: 'visualizeCode'
+                });
             }
-            .output {
-                margin-top: 20px;
-                padding: 15px;
+            
+            function analyzeContext() {
+                vscode.postMessage({
+                    command: 'analyzeContext'
+                });
+            }
+            
+            function exportProject() {
+                vscode.postMessage({
+                    command: 'exportProject'
+                });
+            }
+        </script>
+    </body>
+    </html>`;
+  }
+
+  private getAssistantHtml(webview: vscode.Webview): string {
+    return `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>AI Assistant</title>
+        <style>
+            body {
+                padding: 20px;
+                font-family: var(--vscode-font-family);
+                color: var(--vscode-foreground);
+                background-color: var(--vscode-editor-background);
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+            .chat-container {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+            }
+            .chat-messages {
+                flex: 1;
+                overflow-y: auto;
+                margin-bottom: 20px;
+                padding: 10px;
                 border: 1px solid var(--vscode-panel-border);
                 border-radius: 4px;
-                background-color: var(--vscode-editor-background);
-                min-height: 100px;
+                background-color: var(--vscode-input-background);
             }
-            .loading {
-                text-align: center;
-                color: var(--vscode-descriptionForeground);
-                font-style: italic;
-            }
-            .error {
-                color: var(--vscode-errorForeground);
+            .message {
+                margin-bottom: 15px;
                 padding: 10px;
-                border: 1px solid var(--vscode-errorForeground);
                 border-radius: 4px;
-                margin: 10px 0;
+            }
+            .message.user {
+                background-color: var(--vscode-button-background);
+                color: var(--vscode-button-foreground);
+                margin-left: 20%;
+            }
+            .message.assistant {
+                background-color: var(--vscode-input-background);
+                border: 1px solid var(--vscode-panel-border);
+                margin-right: 20%;
+            }
+            .input-container {
+                display: flex;
+                gap: 10px;
+            }
+            .input-field {
+                flex: 1;
+                padding: 10px;
+                border: 1px solid var(--vscode-panel-border);
+                border-radius: 4px;
+                background-color: var(--vscode-input-background);
+                color: var(--vscode-input-foreground);
+                font-family: var(--vscode-font-family);
+            }
+            .send-button {
+                background-color: var(--vscode-button-background);
+                color: var(--vscode-button-foreground);
+                border: none;
+                padding: 10px 20px;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+            .send-button:hover {
+                background-color: var(--vscode-button-hoverBackground);
             }
         </style>
     </head>
     <body>
-        <div class="container">
-            <div class="header">
-                <div class="title">Synapse</div>
-                <p>Universal Learning Platform</p>
-            </div>`;
-
-    let contentHtml = '';
-    switch (type) {
-      case 'assistant':
-        contentHtml = this._getAssistantHtml();
-        break;
-      case 'visualization':
-        contentHtml = this._getVisualizationHtml(data);
-        break;
-      case 'context':
-        contentHtml = this._getContextAnalysisHtml(data);
-        break;
-      default:
-        contentHtml = '<p>Unknown view type</p>';
-    }
-
-    const footerHtml = `
+        <div class="chat-container">
+            <div class="chat-messages" id="chatMessages">
+                <div class="message assistant">
+                    Hello! I'm your AI coding assistant. How can I help you today?
+                </div>
+            </div>
+            
+            <div class="input-container">
+                <input type="text" class="input-field" id="messageInput" placeholder="Ask me anything about your code..." />
+                <button class="send-button" onclick="sendMessage()">Send</button>
+            </div>
         </div>
+
         <script>
             const vscode = acquireVsCodeApi();
-            
-            function sendPrompt() {
-                const message = document.getElementById('promptMessage').value;
-                if (!message.trim()) {
-                    alert('Please enter a message');
-                    return;
+            const messageInput = document.getElementById('messageInput');
+            const chatMessages = document.getElementById('chatMessages');
+
+            messageInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
                 }
-                
+            });
+
+            function sendMessage() {
+                const message = messageInput.value.trim();
+                if (!message) return;
+
+                // Add user message
+                addMessage(message, 'user');
+                messageInput.value = '';
+
+                // Send to extension
                 vscode.postMessage({
-                    command: 'sendPrompt',
-                    data: { message: message.trim() }
+                    command: 'sendMessage',
+                    message: message
                 });
-                
-                document.getElementById('output').innerHTML = '<div class="loading">Processing...</div>';
             }
-            
-            function executeCode() {
-                const language = document.getElementById('language').value;
-                const entryPoint = document.getElementById('entryPoint').value;
-                const args = document.getElementById('args').value;
-                
-                if (!language || !entryPoint) {
-                    alert('Please fill in all required fields');
-                    return;
-                }
-                
-                vscode.postMessage({
-                    command: 'executeCode',
-                    data: { 
-                        language: language.trim(), 
-                        entryPoint: entryPoint.trim(),
-                        args: args.trim() ? args.trim().split(' ') : []
-                    }
-                });
-                
-                document.getElementById('output').innerHTML = '<div class="loading">Executing code...</div>';
+
+            function addMessage(text, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = \`message \${sender}\`;
+                messageDiv.textContent = text;
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
             }
-            
-            function analyzeContext() {
-                const query = document.getElementById('contextQuery').value;
-                if (!query.trim()) {
-                    alert('Please enter a query');
-                    return;
-                }
-                
-                vscode.postMessage({
-                    command: 'analyzeContext',
-                    data: { query: query.trim() }
-                });
-                
-                document.getElementById('output').innerHTML = '<div class="loading">Analyzing context...</div>';
-            }
-            
+
             // Handle messages from extension
             window.addEventListener('message', event => {
                 const message = event.data;
-                switch (message.type) {
-                    case 'update':
-                        // Handle data updates
-                        break;
-                    case 'response':
-                        document.getElementById('output').innerHTML = '<pre>' + JSON.stringify(message.data, null, 2) + '</pre>';
-                        break;
-                    case 'error':
-                        document.getElementById('output').innerHTML = '<div class="error">' + message.message + '</div>';
-                        break;
+                if (message.command === 'assistantResponse') {
+                    addMessage(message.response, 'assistant');
                 }
             });
         </script>
     </body>
     </html>`;
-
-    return baseHtml + contentHtml + footerHtml;
   }
 
-  private _getAssistantHtml(): string {
-    return `
-        <div class="input-group">
-            <label for="promptMessage">Ask me anything about programming, AI, or learning:</label>
-            <textarea id="promptMessage" placeholder="e.g., Explain how neural networks work, or help me debug this code..."></textarea>
+  private getVisualizationHtml(webview: vscode.Webview, visualization: any): string {
+    return `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Code Visualization</title>
+        <style>
+            body {
+                padding: 20px;
+                font-family: var(--vscode-font-family);
+                color: var(--vscode-foreground);
+                background-color: var(--vscode-editor-background);
+            }
+            .visualization-container {
+                text-align: center;
+                padding: 40px;
+            }
+            .visualization-placeholder {
+                border: 2px dashed var(--vscode-panel-border);
+                border-radius: 8px;
+                padding: 60px 20px;
+                color: var(--vscode-descriptionForeground);
+            }
+            .export-buttons {
+                margin-top: 20px;
+            }
+            .export-button {
+                background-color: var(--vscode-button-background);
+                color: var(--vscode-button-foreground);
+                border: none;
+                padding: 8px 16px;
+                border-radius: 4px;
+                cursor: pointer;
+                margin: 0 5px;
+            }
+            .export-button:hover {
+                background-color: var(--vscode-button-hoverBackground);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="visualization-container">
+            <div class="visualization-placeholder">
+                <h3>Code Visualization</h3>
+                <p>Type: ${visualization.type}</p>
+                <p>Language: ${visualization.config?.language || 'Unknown'}</p>
+                <p>Visualization will be rendered here...</p>
+            </div>
+            
+            <div class="export-buttons">
+                <button class="export-button" onclick="exportAs('png')">Export as PNG</button>
+                <button class="export-button" onclick="exportAs('svg')">Export as SVG</button>
+                <button class="export-button" onclick="exportAs('pdf')">Export as PDF</button>
+            </div>
         </div>
-        <button class="button" onclick="sendPrompt()">Send Prompt</button>
-        <div id="output" class="output">
-            <div class="loading">Ready to help! Ask me anything.</div>
-        </div>`;
+
+        <script>
+            const vscode = acquireVsCodeApi();
+            
+            function exportAs(format) {
+                vscode.postMessage({
+                    command: 'exportVisualization',
+                    format: format
+                });
+            }
+        </script>
+    </body>
+    </html>`;
   }
 
-  private _getVisualizationHtml(data?: any): string {
-    return `
-        <div class="input-group">
-            <label for="language">Programming Language:</label>
-            <input type="text" id="language" placeholder="e.g., python, javascript, java" value="python">
+  private getAnalysisHtml(webview: vscode.Webview, analysis: any): string {
+    return `<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Code Analysis</title>
+        <style>
+            body {
+                padding: 20px;
+                font-family: var(--vscode-font-family);
+                color: var(--vscode-foreground);
+                background-color: var(--vscode-editor-background);
+            }
+            .analysis-container {
+                max-width: 800px;
+                margin: 0 auto;
+            }
+            .analysis-header {
+                border-bottom: 1px solid var(--vscode-panel-border);
+                padding-bottom: 20px;
+                margin-bottom: 20px;
+            }
+            .analysis-title {
+                font-size: 24px;
+                font-weight: bold;
+                margin-bottom: 10px;
+            }
+            .analysis-content {
+                line-height: 1.6;
+            }
+            .analysis-section {
+                margin-bottom: 20px;
+                padding: 15px;
+                border: 1px solid var(--vscode-panel-border);
+                border-radius: 4px;
+                background-color: var(--vscode-input-background);
+            }
+            .section-title {
+                font-weight: bold;
+                margin-bottom: 10px;
+                color: var(--vscode-textPreformat-foreground);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="analysis-container">
+            <div class="analysis-header">
+                <div class="analysis-title">Code Analysis Results</div>
+            </div>
+            
+            <div class="analysis-content">
+                <div class="analysis-section">
+                    <div class="section-title">Analysis Summary</div>
+                    <div>${analysis.summary || 'Analysis completed successfully'}</div>
+                </div>
+                
+                <div class="analysis-section">
+                    <div class="section-title">Key Findings</div>
+                    <div>${analysis.findings || 'No specific findings to report'}</div>
+                </div>
+                
+                <div class="analysis-section">
+                    <div class="section-title">Recommendations</div>
+                    <div>${analysis.recommendations || 'No specific recommendations at this time'}</div>
+                </div>
+            </div>
         </div>
-        <div class="input-group">
-            <label for="entryPoint">Entry Point:</label>
-            <input type="text" id="entryPoint" placeholder="e.g., main.py, index.js" value="main.py">
-        </div>
-        <div class="input-group">
-            <label for="args">Arguments (space-separated):</label>
-            <input type="text" id="args" placeholder="e.g., arg1 arg2 arg3">
-        </div>
-        <button class="button" onclick="executeCode()">Execute & Visualize</button>
-        <div id="output" class="output">
-            <div class="loading">Ready to execute and visualize code.</div>
-        </div>`;
+    </body>
+    </html>`;
   }
 
-  private _getContextAnalysisHtml(data?: any): string {
-    return `
-        <div class="input-group">
-            <label for="contextQuery">Ask about your uploaded documents:</label>
-            <textarea id="contextQuery" placeholder="e.g., What are the main concepts in this document? How does this relate to machine learning?"></textarea>
-        </div>
-        <button class="button" onclick="analyzeContext()">Analyze Context</button>
-        <div id="output" class="output">
-            <div class="loading">Ready to analyze your documents.</div>
-        </div>`;
-  }
-
-  private async _handleSendPrompt(data: any): Promise<void> {
-    try {
-      const response = await this._synapseClient.sendPrompt(data);
-      this._panel?.webview.postMessage({ type: 'response', data: response });
-    } catch (error) {
-      this._panel?.webview.postMessage({ 
-        type: 'error', 
-        message: error instanceof Error ? error.message : 'Failed to send prompt' 
-      });
-    }
-  }
-
-  private async _handleExecuteCode(data: any): Promise<void> {
-    try {
-      // For now, just show a placeholder response
-      this._panel?.webview.postMessage({ 
-        type: 'response', 
-        data: { 
-          message: 'Code execution and visualization coming soon!',
-          request: data 
-        } 
-      });
-    } catch (error) {
-      this._panel?.webview.postMessage({ 
-        type: 'error', 
-        message: error instanceof Error ? error.message : 'Failed to execute code' 
-      });
-    }
-  }
-
-  private async _handleAnalyzeContext(data: any): Promise<void> {
-    try {
-      // For now, just show a placeholder response
-      this._panel?.webview.postMessage({ 
-        type: 'response', 
-        data: { 
-          message: 'Context analysis coming soon!',
-          request: data 
-        } 
-      });
-    } catch (error) {
-      this._panel?.webview.postMessage({ 
-        type: 'error', 
-        message: error instanceof Error ? error.message : 'Failed to analyze context' 
-      });
-    }
-  }
-
-  private async _handleCreateVisualization(data: any): Promise<void> {
-    try {
-      const response = await this._synapseClient.createVisualization(data);
-      this._panel?.webview.postMessage({ type: 'response', data: response });
-    } catch (error) {
-      this._panel?.webview.postMessage({ 
-        type: 'error', 
-        message: error instanceof Error ? error.message : 'Failed to create visualization' 
-      });
-    }
+  dispose(): void {
+    // Clean up any resources if needed
   }
 }

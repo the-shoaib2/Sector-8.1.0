@@ -1,1 +1,1 @@
-{"version":3,"file":"extension.d.ts","sourceRoot":"","sources":["../src/extension.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,MAAM,MAAM,QAAQ,CAAC;AAMjC,wBAAgB,QAAQ,CAAC,OAAO,EAAE,MAAM,CAAC,gBAAgB,QAiGxD;AAED,wBAAgB,UAAU,SAEzB"}
+{"version":3,"file":"extension.d.ts","sourceRoot":"","sources":["../apps/vscode-extension/src/extension.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,MAAM,MAAM,QAAQ,CAAC;AAOjC,wBAAgB,QAAQ,CAAC,OAAO,EAAE,MAAM,CAAC,gBAAgB,QA+LxD;AAED,wBAAgB,UAAU,SAKzB"}

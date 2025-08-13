@@ -36,17 +36,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SectorProvider = void 0;
 const vscode = __importStar(require("vscode"));
 class SectorProvider {
-    synapseClient;
+    context;
+    authService;
     static viewType = 'synapse.projects';
-    constructor(synapseClient) {
-        this.synapseClient = synapseClient;
+    constructor(context, authService) {
+        this.context = context;
+        this.authService = authService;
     }
     resolveWebviewView(webviewView, context, _token) {
         webviewView.webview.options = {
             enableScripts: true,
             localResourceRoots: [
-                vscode.Uri.joinPath(vscode.extensions.getExtension('synapse.synapse-learning-platform')?.extensionUri || vscode.Uri.file(__dirname), 'media'),
-                vscode.Uri.joinPath(vscode.extensions.getExtension('synapse.synapse-learning-platform')?.extensionUri || vscode.Uri.file(__dirname), 'out/compiled'),
+                vscode.Uri.joinPath(this.context.extensionUri, 'media'),
+                vscode.Uri.joinPath(this.context.extensionUri, 'out/compiled'),
             ],
         };
         webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
@@ -56,10 +58,36 @@ class SectorProvider {
                 case 'refresh':
                     this._updateProjects(webviewView);
                     return;
+                case 'login':
+                    this.authService.login();
+                    return;
             }
         });
         // Initial load
         this._updateProjects(webviewView);
+    }
+    async _updateProjects(webviewView) {
+        if (!this.authService.isAuthenticated()) {
+            webviewView.webview.postMessage({
+                type: 'notAuthenticated',
+                message: 'Please log in to view your projects'
+            });
+            return;
+        }
+        try {
+            const client = this.authService.getClient();
+            const projects = await client.getProjects();
+            webviewView.webview.postMessage({
+                type: 'updateProjects',
+                projects: projects
+            });
+        }
+        catch (error) {
+            webviewView.webview.postMessage({
+                type: 'error',
+                message: `Failed to load projects: ${error instanceof Error ? error.message : 'Unknown error'}`
+            });
+        }
     }
     _getHtmlForWebview(webview) {
         return `<!DOCTYPE html>
@@ -105,10 +133,27 @@ class SectorProvider {
                 border-radius: 4px;
                 margin: 8px 0;
             }
+            .not-authenticated {
+                text-align: center;
+                padding: 20px;
+                color: var(--vscode-descriptionForeground);
+            }
+            .login-button {
+                background-color: var(--vscode-button-background);
+                color: var(--vscode-button-foreground);
+                border: none;
+                padding: 8px 16px;
+                border-radius: 4px;
+                cursor: pointer;
+                margin-top: 10px;
+            }
+            .login-button:hover {
+                background-color: var(--vscode-button-hoverBackground);
+            }
         </style>
     </head>
     <body>
-        <div id="projects">
+        <div id="content">
             <div class="loading">Loading projects...</div>
         </div>
         <script>
@@ -124,60 +169,62 @@ class SectorProvider {
                     case 'error':
                         showError(message.message);
                         break;
+                    case 'notAuthenticated':
+                        showNotAuthenticated(message.message);
+                        break;
                 }
             });
-            
+
             function updateProjectsList(projects) {
-                const container = document.getElementById('projects');
+                const content = document.getElementById('content');
                 if (projects.length === 0) {
-                    container.innerHTML = '<div class="loading">No projects found</div>';
+                    content.innerHTML = '<div class="not-authenticated">No projects found. Create your first project!</div>';
                     return;
                 }
-                
-                container.innerHTML = projects.map(project => \`
+
+                const projectsHtml = projects.map(project => \`
                     <div class="project-item" onclick="openProject('\${project.id}')">
                         <div class="project-name">\${project.name}</div>
                         <div class="project-description">\${project.description || 'No description'}</div>
                     </div>
                 \`).join('');
+
+                content.innerHTML = projectsHtml;
             }
-            
+
             function showError(message) {
-                const container = document.getElementById('projects');
-                container.innerHTML = \`<div class="error">\${message}</div>\`;
+                const content = document.getElementById('content');
+                content.innerHTML = \`<div class="error">\${message}</div>\`;
             }
-            
+
+            function showNotAuthenticated(message) {
+                const content = document.getElementById('content');
+                content.innerHTML = \`
+                    <div class="not-authenticated">
+                        <div>\${message}</div>
+                        <button class="login-button" onclick="login()">Sign In</button>
+                    </div>
+                \`;
+            }
+
             function openProject(projectId) {
                 vscode.postMessage({
                     command: 'openProject',
                     projectId: projectId
                 });
             }
+
+            function login() {
+                vscode.postMessage({
+                    command: 'login'
+                });
+            }
         </script>
     </body>
     </html>`;
     }
-    async _updateProjects(webviewView) {
-        try {
-            // TODO: Implement actual project fetching
-            const projects = [
-                {
-                    id: 'demo-1',
-                    name: 'Hello World',
-                    description: 'A sample project to get started'
-                }
-            ];
-            webviewView.webview.postMessage({
-                type: 'updateProjects',
-                projects: projects
-            });
-        }
-        catch (error) {
-            webviewView.webview.postMessage({
-                type: 'error',
-                message: 'Failed to load projects'
-            });
-        }
+    dispose() {
+        // Clean up any resources if needed
     }
 }
 exports.SectorProvider = SectorProvider;

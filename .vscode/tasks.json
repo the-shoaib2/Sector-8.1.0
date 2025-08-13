@@ -13,7 +13,7 @@
       },
       "problemMatcher": "$tsc",
       "options": {
-        "cwd": "${workspaceFolder}/synapse-dev-extension"
+        "cwd": "${workspaceFolder}/apps/vscode-extension"
       }
     }
   ]
